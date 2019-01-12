@@ -1,0 +1,374 @@
+<html>
+<head>
+<title>Controller.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(204,120,50); }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(128,128,128); }
+.s3 { color: rgb(106,135,89); }
+.s4 { color: rgb(104,151,187); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+Controller.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">sample</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">javafx.collections.FXCollections</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">javafx.collections.ObservableList</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">javafx.fxml.FXML</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">javafx.scene.control.CheckBox</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">javafx.scene.control.ChoiceBox</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">javafx.scene.control.TextField</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">javax.sound.midi.SysexMessage</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.util.EmptyStackException</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.util.regex.*</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">java.io.*</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.util.Iterator</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.io.File</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.io.IOException</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.util.regex.Pattern</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">java.lang.Exception</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">public class </span><span class="s1">Controller{ 
+ 
+ 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField card_owner_name_fieldtex</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField card_owner_surname_fieldtext</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField card_number_fieldtext</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField card_bank_assigned_fieldtext</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">CheckBox is_debit</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">CheckBox is_credit</span><span class="s0">;</span><span class="s1"> 
+ 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField bank_name</span><span class="s0">;</span><span class="s1"> 
+ 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField client_name</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField client_surname</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField client_assigned_to_bank</span><span class="s0">;</span><span class="s1"> 
+ 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField account_owner_name</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField account_owner_surname</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField account_number</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField account_assigned_to_bank</span><span class="s0">;</span><span class="s1"> 
+ 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField Firm_name</span><span class="s0">;</span><span class="s1"> 
+ 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField query_card_number</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField query_firm_name</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField query_currency</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField query_amount</span><span class="s0">;</span><span class="s1"> 
+ 
+ 
+    </span><span class="s2">//archiwum</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField archive_save_file</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField archive_open_file</span><span class="s0">;</span><span class="s1"> 
+ 
+    ObservableList&lt;String&gt; archive_choice_status_list = FXCollections.observableArrayList(</span><span class="s3">&quot;OR&quot;</span><span class="s0">, </span><span class="s3">&quot;AND&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s2">//wyszukiwanie</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField searching_type</span><span class="s0">;</span><span class="s1"> 
+    @FXML </span><span class="s0">private </span><span class="s1">TextField search_phrase</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">private </span><span class="s1">String search_cpy</span><span class="s0">;</span><span class="s1"> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+    </span><span class="s2">//</span><span class="s1"> 
+ 
+ 
+    Card_service_center card_service_center = </span><span class="s0">new </span><span class="s1">Card_service_center()</span><span class="s0">;</span><span class="s1"> 
+ 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">add_card_prompt(){ 
+        </span><span class="s0">if</span><span class="s1">(!is_credit.isSelected()&amp;&amp;!is_debit.isSelected()){ 
+            System.out.println(</span><span class="s3">&quot;Nie zaznaczono typu karty&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        } 
+        </span><span class="s0">if</span><span class="s1">(is_credit.isSelected()&amp;&amp;is_debit.isSelected()){ 
+            System.out.println(</span><span class="s3">&quot;Zaznacz odpowiednio typ karty&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        } 
+ 
+ 
+        </span><span class="s0">for</span><span class="s1">(Bank obj:card_service_center.bank_list){ 
+            </span><span class="s0">if</span><span class="s1">(obj.bank_name.equals(card_bank_assigned_fieldtext.getText())){ 
+                </span><span class="s0">for</span><span class="s1">(Account acc: obj.list_of_acc_in_bank){ 
+                    </span><span class="s0">if</span><span class="s1">(acc.getOwner_name().equals(card_owner_name_fieldtex.getText())&amp;&amp;acc.getOwner_surname().equals(card_owner_surname_fieldtext.getText())){ 
+                        </span><span class="s0">if</span><span class="s1">(is_credit.isSelected() &amp;&amp; !is_debit.isSelected()) { 
+                            Credit new_card = </span><span class="s0">new </span><span class="s1">Credit(Long.parseLong(card_number_fieldtext.getText())</span><span class="s0">, </span><span class="s1">card_owner_name_fieldtex.getText()</span><span class="s0">, </span><span class="s1">card_owner_surname_fieldtext.getText()</span><span class="s0">, </span><span class="s1">card_bank_assigned_fieldtext.getText())</span><span class="s0">;</span><span class="s1"> 
+                            acc.add_card(new_card)</span><span class="s0">;</span><span class="s1"> 
+                            System.out.println(</span><span class="s3">&quot;Dodano kartę&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                            </span><span class="s0">return;</span><span class="s1"> 
+                        } 
+                        </span><span class="s0">if</span><span class="s1">(is_debit.isSelected() &amp;&amp; !is_credit.isSelected()) { 
+                            Debit new_card = </span><span class="s0">new </span><span class="s1">Debit(Long.parseLong(card_number_fieldtext.getText())</span><span class="s0">, </span><span class="s1">card_owner_name_fieldtex.getText()</span><span class="s0">, </span><span class="s1">card_owner_surname_fieldtext.getText()</span><span class="s0">, </span><span class="s1">card_bank_assigned_fieldtext.getText())</span><span class="s0">;</span><span class="s1"> 
+                            acc.add_card(new_card)</span><span class="s0">;</span><span class="s1"> 
+                            System.out.println(</span><span class="s3">&quot;Dodano kartę&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                            </span><span class="s0">return;</span><span class="s1"> 
+                        } 
+                    } 
+                } 
+            } 
+        } 
+ 
+        System.out.println(</span><span class="s3">&quot;Brak konta o podanych danych&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+ 
+ 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">add_bank_prompt(){ 
+        </span><span class="s0">if</span><span class="s1">(bank_name.getText().isEmpty()){ 
+            System.out.println(</span><span class="s3">&quot;Uzupełnij wszystkie pola!&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        } 
+        Bank bank = </span><span class="s0">new </span><span class="s1">Bank (bank_name.getText())</span><span class="s0">;</span><span class="s1"> 
+        card_service_center.add_bank(bank)</span><span class="s0">;</span><span class="s1"> 
+        System.out.println(</span><span class="s3">&quot;Dodano bank&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+    } 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">delete_bank_prompt(){ 
+        </span><span class="s0">if</span><span class="s1">(card_service_center.getBank_list().isEmpty()){ 
+            System.out.println(</span><span class="s3">&quot;Brak banków w bazie&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        } 
+        </span><span class="s0">try</span><span class="s1">{ 
+ 
+            card_service_center.delete_bank(bank_name.getText())</span><span class="s0">;</span><span class="s1"> 
+ 
+        }</span><span class="s0">catch </span><span class="s1">(NullPointerException e){ 
+            System.out.println(</span><span class="s3">&quot;Brak podanego banku w bazie&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+        } 
+ 
+    } 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">get_list_of_bank(){ 
+        </span><span class="s0">if</span><span class="s1">(card_service_center.getBank_list().isEmpty()){ 
+            System.out.println(</span><span class="s3">&quot;Brak banków w bazie&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        } 
+        System.out.println(card_service_center.bank_list)</span><span class="s0">;</span><span class="s1"> 
+    } 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">add_client(){ 
+        </span><span class="s0">if</span><span class="s1">(client_assigned_to_bank.getText().isEmpty()||client_name.getText().isEmpty()||client_surname.getText().isEmpty()){ 
+            System.out.println(</span><span class="s3">&quot;Uzupełnij wszystkie pola!&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        } 
+        Client client = </span><span class="s0">new </span><span class="s1">Client(client_name.getText()</span><span class="s0">,</span><span class="s1">client_surname.getText())</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">for</span><span class="s1">(Bank obj:card_service_center.bank_list){ 
+            </span><span class="s0">if</span><span class="s1">(obj.bank_name.equals(client_assigned_to_bank.getText())){ 
+                obj.add_client(client)</span><span class="s0">;</span><span class="s1"> 
+                System.out.println(</span><span class="s3">&quot;Dodano klienta&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                </span><span class="s0">return;</span><span class="s1"> 
+            } 
+        } 
+        System.out.println(</span><span class="s3">&quot;Brak banku o podanej nazwie&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+    } 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">add_account(){ 
+        </span><span class="s0">if</span><span class="s1">(account_assigned_to_bank.getText().isEmpty()||account_number.getText().isEmpty()||account_owner_name.getText().isEmpty()||account_owner_surname.getText().isEmpty()){ 
+            System.out.println(</span><span class="s3">&quot;Uzupełnij wszystkie pola!&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        } 
+ 
+ 
+        </span><span class="s0">try</span><span class="s1">{ 
+            Long.parseLong(account_number.getText())</span><span class="s0">;</span><span class="s1"> 
+        Account account = </span><span class="s0">new </span><span class="s1">Account(account_owner_name.getText()</span><span class="s0">,</span><span class="s1">account_owner_surname.getText()</span><span class="s0">,</span><span class="s1">Integer.parseInt(account_number.getText()))</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">for</span><span class="s1">(Bank obj:card_service_center.bank_list){ 
+            </span><span class="s0">if</span><span class="s1">(obj.bank_name.equals(account_assigned_to_bank.getText())){ 
+                obj.add_account(account)</span><span class="s0">;</span><span class="s1"> 
+                System.out.println(</span><span class="s3">&quot;Dodano konto&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                </span><span class="s0">return;</span><span class="s1"> 
+            } 
+        } 
+            System.out.println(</span><span class="s3">&quot;Brak klienta o podanych danych&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+        }</span><span class="s0">catch</span><span class="s1">(NumberFormatException e){ 
+            System.out.println(</span><span class="s3">&quot;Wystąpił błąd - podaj odpowiedni numer karty&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+        } 
+    } 
+ 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">add_firm(){ 
+        </span><span class="s0">if</span><span class="s1">(Firm_name.getText().isEmpty()){ 
+            System.out.println(</span><span class="s3">&quot;Uzupełnij wszystkie pola!&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        } 
+        Firm firm = </span><span class="s0">new </span><span class="s1">Firm(Firm_name.getText())</span><span class="s0">;</span><span class="s1"> 
+        card_service_center.add_firm(firm)</span><span class="s0">;</span><span class="s1"> 
+        System.out.println(</span><span class="s3">&quot;Dodano firmę pomyślnie&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">delete_firm(){ 
+        </span><span class="s0">if</span><span class="s1">(Firm_name.getText().isEmpty()){ 
+            System.out.println(</span><span class="s3">&quot;Uzupełnij wszystkie pola!&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        } 
+        </span><span class="s0">for</span><span class="s1">(Iterator&lt;Firm&gt; iterator = card_service_center.firm_list.iterator()</span><span class="s0">; </span><span class="s1">iterator.hasNext()</span><span class="s0">;</span><span class="s1">){ 
+            Firm firm_clone = iterator.next()</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s1">(firm_clone.getName_of_firm().equals(Firm_name.getText())) { 
+                iterator.remove()</span><span class="s0">;</span><span class="s1"> 
+                System.out.println(</span><span class="s3">&quot;Usunięto firmę pomyślnie&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                </span><span class="s0">return;</span><span class="s1"> 
+            } 
+        } 
+        System.out.println(</span><span class="s3">&quot;Brak firmy w bazie&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">add_query() { 
+        </span><span class="s0">if</span><span class="s1">(query_card_number.getText().isEmpty()||query_amount.getText().isEmpty()||query_currency.getText().isEmpty()||query_firm_name.getText().isEmpty()){ 
+                System.out.println(</span><span class="s3">&quot;Niepoprawnie uzupełniono pola&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                </span><span class="s0">return;</span><span class="s1"> 
+        } 
+        </span><span class="s0">try</span><span class="s1">{ 
+ 
+            Long.parseLong(query_card_number.getText())</span><span class="s0">;</span><span class="s1"> 
+            Float.parseFloat(query_amount.getText())</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">long </span><span class="s1">card_number_meth = Long.parseLong(query_card_number.getText())</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">float </span><span class="s1">query_amount_meth = Float.parseFloat(query_amount.getText())</span><span class="s0">;</span><span class="s1"> 
+ 
+            </span><span class="s0">for</span><span class="s1">(Iterator&lt;Firm&gt; iterator = card_service_center.firm_list.iterator()</span><span class="s0">; </span><span class="s1">iterator.hasNext()</span><span class="s0">;</span><span class="s1">){ 
+                Firm firm_clone = iterator.next()</span><span class="s0">;</span><span class="s1"> 
+                </span><span class="s0">if</span><span class="s1">(!firm_clone.getName_of_firm().equals(Firm_name.getText())) { 
+                    System.out.println(</span><span class="s3">&quot;Brak firmy w bazie&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                    </span><span class="s0">return;</span><span class="s1"> 
+                } 
+            } 
+ 
+ 
+ 
+ 
+          </span><span class="s0">for</span><span class="s1">(Bank bank:card_service_center.bank_list){ 
+            </span><span class="s0">for</span><span class="s1">(Account account:bank.list_of_acc_in_bank){ 
+                </span><span class="s0">for</span><span class="s1">(Card card: account.card_assigned_to_account){ 
+                    </span><span class="s0">if</span><span class="s1">(card.getCard_number()==card_number_meth){ 
+                        Card card_copy=card</span><span class="s0">;</span><span class="s1"> 
+                        </span><span class="s0">boolean </span><span class="s1">decision=Math.random() &lt; </span><span class="s4">0.8</span><span class="s0">;</span><span class="s1"> 
+                        </span><span class="s0">if</span><span class="s1">(decision) { 
+                            Query query = </span><span class="s0">new </span><span class="s1">Query(card_copy</span><span class="s0">, </span><span class="s1">query_currency.getText()</span><span class="s0">,</span><span class="s1">query_firm_name.getText()</span><span class="s0">,</span><span class="s1">query_amount_meth)</span><span class="s0">;</span><span class="s1"> 
+                            card_service_center.add_query(query)</span><span class="s0">;</span><span class="s1"> 
+                            System.out.println(</span><span class="s3">&quot;Transakcja zaakceptowana&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+                        }</span><span class="s0">else</span><span class="s1">{System.out.println(</span><span class="s3">&quot;Transakcja odrzucona&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1">} 
+                        </span><span class="s0">return;</span><span class="s1"> 
+                    } 
+                } 
+            } 
+        } 
+            System.out.println(</span><span class="s3">&quot;Transakcja odrzucona&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+ 
+ 
+        }</span><span class="s0">catch</span><span class="s1">(NumberFormatException e){ 
+            System.out.println(</span><span class="s3">&quot;Wystąpił błąd - podaj odpowiedni numer karty, bądź odpowiednią kwotę&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+        } 
+ 
+ 
+ 
+ 
+    } 
+ 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">get_queries() { 
+      </span><span class="s0">try </span><span class="s1">{ 
+          </span><span class="s0">if</span><span class="s1">(card_service_center.query_list.isEmpty()){ 
+              </span><span class="s0">throw new </span><span class="s1">NullPointerException()</span><span class="s0">;</span><span class="s1"> 
+          } 
+          System.out.println(card_service_center.getQuery_list())</span><span class="s0">;</span><span class="s1"> 
+      }</span><span class="s0">catch</span><span class="s1">(NullPointerException e){ 
+          System.out.println(</span><span class="s3">&quot;Lista zapytań jest pusta - kod błędu: &quot; </span><span class="s1">+ e)</span><span class="s0">;</span><span class="s1"> 
+      } 
+    } 
+ 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">save_to_file () </span><span class="s0">throws </span><span class="s1">IOException { 
+        </span><span class="s0">try </span><span class="s1">{ 
+ 
+                File file = </span><span class="s0">new </span><span class="s1">File(archive_save_file.getText())</span><span class="s0">;</span><span class="s1"> 
+                FileOutputStream fop = </span><span class="s0">new </span><span class="s1">FileOutputStream(file)</span><span class="s0">;</span><span class="s1"> 
+                String output = card_service_center.toString()</span><span class="s0">;</span><span class="s1"> 
+ 
+                </span><span class="s0">if </span><span class="s1">(!file.exists()) { 
+                    file.createNewFile()</span><span class="s0">;</span><span class="s1"> 
+                } 
+ 
+                </span><span class="s0">byte</span><span class="s1">[] contentInBytes = output.getBytes()</span><span class="s0">;</span><span class="s1"> 
+                fop.write(contentInBytes)</span><span class="s0">;</span><span class="s1"> 
+                fop.flush()</span><span class="s0">;</span><span class="s1"> 
+                fop.close()</span><span class="s0">;</span><span class="s1"> 
+ 
+                System.out.println(</span><span class="s3">&quot;Operacja zapisu zakończona&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+        } </span><span class="s0">catch </span><span class="s1">(IOException e) { 
+            System.out.println(</span><span class="s3">&quot;Nie podano nazwy pliku do zapisu - kod błędu: &quot; </span><span class="s1">+ e)</span><span class="s0">;</span><span class="s1"> 
+        } 
+    } 
+ 
+ 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">archive_read_from_file () </span><span class="s0">throws </span><span class="s1">IOException { 
+      </span><span class="s0">try </span><span class="s1">{ 
+          InputStream is = </span><span class="s0">new </span><span class="s1">FileInputStream(archive_open_file.getText())</span><span class="s0">;</span><span class="s1"> 
+          BufferedReader buf = </span><span class="s0">new </span><span class="s1">BufferedReader(</span><span class="s0">new </span><span class="s1">InputStreamReader(is))</span><span class="s0">;</span><span class="s1"> 
+          String line = buf.readLine()</span><span class="s0">;</span><span class="s1"> 
+          StringBuilder sb = </span><span class="s0">new </span><span class="s1">StringBuilder()</span><span class="s0">;</span><span class="s1"> 
+          </span><span class="s0">while </span><span class="s1">(line != </span><span class="s0">null</span><span class="s1">) { 
+              sb.append(line).append(</span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">&quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+              line = buf.readLine()</span><span class="s0">;</span><span class="s1"> 
+          } 
+          String fileAsString = sb.toString()</span><span class="s0">;</span><span class="s1"> 
+          search_cpy = fileAsString</span><span class="s0">;</span><span class="s1"> 
+          System.out.println(</span><span class="s3">&quot;Archiwum z dysku : &quot; </span><span class="s1">+ fileAsString)</span><span class="s0">;</span><span class="s1"> 
+      }</span><span class="s0">catch</span><span class="s1">(FileNotFoundException e){ 
+          System.out.println(</span><span class="s3">&quot;Nie odnaleziono pliku - kod błędu: &quot; </span><span class="s1">+ e)</span><span class="s0">;</span><span class="s1"> 
+      } 
+    } 
+ 
+    @FXML 
+    </span><span class="s0">public void </span><span class="s1">search(){ 
+     </span><span class="s0">try </span><span class="s1">{ 
+         </span><span class="s0">if </span><span class="s1">(search_phrase.getText().isEmpty()||search_cpy.isEmpty()) { 
+             </span><span class="s0">throw new </span><span class="s1">Exception()</span><span class="s0">;</span><span class="s1"> 
+         } 
+ 
+         String final_string = search_cpy.replaceAll(search_phrase.getText()</span><span class="s0">, </span><span class="s3">&quot; [MATCH]&quot; </span><span class="s1">+ search_phrase.getText() + </span><span class="s3">&quot;[MATCH] &quot;</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+         System.out.println(final_string)</span><span class="s0">;</span><span class="s1"> 
+     }</span><span class="s0">catch</span><span class="s1">(Exception e){ 
+         System.out.println(</span><span class="s3">&quot;Pole 'Szukana fraza' jest puste, bądź nie wczytano archiwum - kod błędu:&quot; </span><span class="s1">+ e)</span><span class="s0">;</span><span class="s1"> 
+     } 
+    } 
+ 
+ 
+} 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+</span></pre>
+</body>
+</html>
