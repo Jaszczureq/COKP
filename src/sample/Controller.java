@@ -4,20 +4,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
-
-import java.io.*;
-import java.util.Iterator;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.Exception;
+import java.util.Iterator;
 
 public class Controller {
 
-
     @FXML
-    private TextField card_owner_name_fieldtex;
+    private TextField card_owner_name_fieldtext;
     @FXML
     private TextField card_owner_surname_fieldtext;
     @FXML
@@ -47,6 +45,10 @@ public class Controller {
     private TextField account_number;
     @FXML
     private TextField account_assigned_to_bank;
+    @FXML
+    private CheckBox golden;
+    @FXML
+    private CheckBox foreign;
 
     @FXML
     private TextField Firm_name;
@@ -71,8 +73,30 @@ public class Controller {
     @FXML
     private TextField search_phrase;
     private String search_cpy;
+    @FXML
+//    private ComboBox box;
 
     Card_service_center card_service_center = new Card_service_center();
+    public Controller() {
+//        System.out.println("Created controller");
+//        final ObservableList<Bank> bank_obs = FXCollections.observableArrayList(card_service_center.bank_list);
+//        System.out.println("Created bank_obs");
+////        box.setItems(FXCollections.observableArrayList(card_service_center.bank_list));
+//        ArrayList<String> list = new ArrayList<String>();
+//        list.add("Test1");
+////        box.setItems(FXCollections.observableArrayList(list));
+//        list.add("Test2");
+//        System.out.println("ItemList has been set");
+//        final ObservableList<String> bank_obs2 = FXCollections.observableArrayList("s", "t", "x");
+//        ObservableList<String> options =
+//                FXCollections.observableArrayList(
+//                        "Option 1",
+//                        "Option 2",
+//                        "Option 3"
+//                );
+//        box=new ComboBox(options);
+//        box.setItems(options);
+    }
 
     @FXML
     public void add_card_prompt() {
@@ -89,16 +113,16 @@ public class Controller {
         for (Bank obj : card_service_center.bank_list) {
             if (obj.bank_name.equals(card_bank_assigned_fieldtext.getText())) {
                 for (Account acc : obj.list_of_acc_in_bank) {
-                    if (acc.getOwner_name().equals(card_owner_name_fieldtex.getText()) && acc.getOwner_surname().equals(card_owner_surname_fieldtext.getText())) {
+                    if (acc.getOwner_name().equals(card_owner_name_fieldtext.getText()) && acc.getOwner_surname().equals(card_owner_surname_fieldtext.getText())) {
                         if (is_credit.isSelected() && !is_debit.isSelected()) {
-                            Credit new_card = new Credit(Long.parseLong(card_number_fieldtext.getText()), card_owner_name_fieldtex.getText(),
+                            Credit new_card = new Credit(Long.parseLong(card_number_fieldtext.getText()), card_owner_name_fieldtext.getText(),
                                     card_owner_surname_fieldtext.getText(), card_bank_assigned_fieldtext.getText());
                             acc.add_card(new_card);
                             System.out.println("Dodano kartę");
                             return;
                         }
                         if (is_debit.isSelected() && !is_credit.isSelected()) {
-                            Debit new_card = new Debit(Long.parseLong(card_number_fieldtext.getText()), card_owner_name_fieldtex.getText(),
+                            Debit new_card = new Debit(Long.parseLong(card_number_fieldtext.getText()), card_owner_name_fieldtext.getText(),
                                     card_owner_surname_fieldtext.getText(), card_bank_assigned_fieldtext.getText());
                             acc.add_card(new_card);
                             System.out.println("Dodano kartę");
@@ -156,7 +180,8 @@ public class Controller {
             return;
         }
         Client client = new AddingClients().making_clients(ClientType.ADULT);
-//        client.
+//        Client client=new Clie
+
         for (Bank obj : card_service_center.bank_list) {
             if (obj.bank_name.equals(client_assigned_to_bank.getText())) {
                 obj.add_client(client);
@@ -173,11 +198,14 @@ public class Controller {
             System.out.println("Uzupełnij wszystkie pola!");
             return;
         }
-
-
         try {
             Long.parseLong(account_number.getText());
-            Account account = new Account(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()), 1);
+
+            Account account =new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()), 1);
+            if(golden.isSelected())
+                account=new Account_level_golden(account,2.5);
+            if(foreign.isSelected())
+                account=new Account_level_foreign(account,"gbp");
             for (Bank obj : card_service_center.bank_list) {
                 if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
                     obj.add_account(account);
@@ -232,8 +260,7 @@ public class Controller {
             long card_number_meth = Long.parseLong(query_card_number.getText());
             float query_amount_meth = Float.parseFloat(query_amount.getText());
 
-            for (Iterator<Firm> iterator = card_service_center.firm_list.iterator(); iterator.hasNext(); ) {
-                Firm firm_clone = iterator.next();
+            for (Firm firm_clone : card_service_center.firm_list) {
                 if (!firm_clone.getName_of_firm().equals(Firm_name.getText())) {
                     System.out.println("Brak firmy w bazie");
                     return;
@@ -243,12 +270,11 @@ public class Controller {
 
             for (Bank bank : card_service_center.bank_list) {
                 for (Account account : bank.list_of_acc_in_bank) {
-                    for (Card card : account.card_assigned_to_account) {
+                    for (Card card : account.getCard_assigned_to_account()) {
                         if (card.getCard_number() == card_number_meth) {
-                            Card card_copy = card;
                             boolean decision = Math.random() < 0.8;
                             if (decision) {
-                                Query query = new Query(card_copy, query_currency.getText(), query_firm_name.getText(), query_amount_meth);
+                                Query query = new Query(card, query_currency.getText(), query_firm_name.getText(), query_amount_meth);
                                 card_service_center.add_query(query);
                                 System.out.println("Transakcja zaakceptowana");
                             } else {

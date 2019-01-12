@@ -3,22 +3,41 @@ package sample;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public interface Account {
+    String decorate();
+
+    void add_card(Card card);
+
+    List<Card> getCard_assigned_to_account();
+
+    String getOwner_name();
+
+    String getOwner_surname();
+
+    int getBalance();
+
+    void setBalance(int balance);
+}
+
+class AccountImpl implements Account {
 
     private AccountState state = null;
     private String owner_name;
     private String owner_surname;
     private int balance = 0;
-    private float interest_rate;                                    //
+    //    private float interest_rate;                                    //
     public long acc_number;
     public List<Card> card_assigned_to_account = new ArrayList<Card>();
 
 
-    public Account(String owner_name, String owner_surname, int acc_number, float interest_rate) {
+    public AccountImpl() {
+    }
+
+    public AccountImpl(String owner_name, String owner_surname, int acc_number, float interest_rate) {
         this.owner_name = owner_name;
         this.owner_surname = owner_surname;
         this.acc_number = acc_number;
-        this.interest_rate = interest_rate;                     //
+//        this.interest_rate = interest_rate;                     //
         this.state = new AccountOpen();
     }
 
@@ -30,33 +49,38 @@ public class Account {
         this.state = new AccountClosed();
     }
 
-    public Account(Account account) {
+    public AccountImpl(AccountImpl account) {
         this.owner_name = account.owner_name;
         this.owner_surname = account.owner_surname;
         this.acc_number = account.acc_number;
-        this.interest_rate = account.interest_rate;             //
+//        this.interest_rate = account.interest_rate;             //
         this.balance = account.balance;                         //
         this.card_assigned_to_account = account.card_assigned_to_account;
     }
 
-    public Account() {
+    @Override
+    public String decorate() {
+        return null;
     }
 
+    //region getters, setters
+    @Override
     public int getBalance() {
         return balance;
     }
 
+    @Override
     public void setBalance(int balance) {
         this.balance = balance;
     }
 
-    public float getInterest_rate() {
-        return interest_rate;
-    }   //
-
-    public void setInterest_rate(float interest_rate) {
-        this.interest_rate = interest_rate;
-    }       //
+//    public float getInterest_rate() {
+//        return interest_rate;
+//}   //
+//
+//    public void setInterest_rate(float interest_rate) {
+//        this.interest_rate = interest_rate;
+//    }       //
 
     public String getOwner_name() {
         return owner_name;
@@ -102,6 +126,8 @@ public class Account {
         return card_assigned_to_account.contains(card);
     }
 
+    //endregion
+
     @Override
     public String toString() {
         return "Account{" +
@@ -113,54 +139,105 @@ public class Account {
     }
 }
 
-class Account_level extends Account {
-    private Account account;
+abstract class Account_level implements Account {
+    public Account account;
 
     public Account_level(Account acc) {
         this.account = acc;
     }
+
+    @Override
+    public String decorate() {
+
+        return null;
+    }
+
+    @Override
+    public void setBalance(int balance) {
+        account.setBalance(balance);
+    }
+
+    @Override
+    public int getBalance() {
+        return account.getBalance();
+    }
+
+    @Override
+    public String getOwner_name() {
+        return account.getOwner_name();
+    }
+
+    @Override
+    public String getOwner_surname() {
+        return account.getOwner_surname();
+    }
+
+    @Override
+    public void add_card(Card card) {
+        account.add_card(card);
+    }
+
+    @Override
+    public List<Card> getCard_assigned_to_account() {
+        return account.getCard_assigned_to_account();
+    }
 }
 
 class Account_level_golden extends Account_level {
-    private Account account;
+    private double interest_rate;
 
-    public Account_level_golden(Account acc) {
+    public Account_level_golden(Account acc, double ir) {
         super(acc);
-        this.account = acc;
-        acc.setInterest_rate(5);
+        this.interest_rate = ir;
     }
 
-    public void setInteresr_rate(float ir_rt) {
-        account.setInterest_rate(ir_rt);
+    public double getInterest_rate() {
+        return interest_rate;
+    }
+
+    public void setInterest_rate(double interest_rate) {
+        this.interest_rate = interest_rate;
+    }
+
+    @Override
+    public String decorate() {
+        return super.decorate();
     }
 
     @Override
     public String toString() {
-        return "Golden Account{" +
-                "owner_name='" + account.getOwner_name() + '\'' +
-                ", owner_surname='" + account.getOwner_surname() + '\'' +
-                ", acc_number=" + account.getAcc_number() +
-                ", card_assigned_to_account=" + account.getCard_assigned_to_account() +
-                '}';
+        return "Golden Account{" + super.account.toString();
+//                "owner_name='" + account.getOwner_name() + '\'' +
+//                ", owner_surname='" + account.getOwner_surname() + '\'' +
+//                ", acc_number=" + account.getAcc_number() +
+//                ", card_assigned_to_account=" + account.getCard_assigned_to_account() +
+//                '}';
     }
 }
 
-class Account_level_silver extends Account_level {
-    private Account account;
+class Account_level_foreign extends Account_level {
+    private String currency;
 
-    public Account_level_silver(Account acc) {
+    public Account_level_foreign(Account acc, String cur) {
         super(acc);
-        this.account = acc;
-        acc.setInterest_rate(2);
+        this.currency = cur;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     @Override
     public String toString() {
-        return "Silver Account{" +
-                "owner_name='" + account.getOwner_name() + '\'' +
-                ", owner_surname='" + account.getOwner_surname() + '\'' +
-                ", acc_number=" + account.getAcc_number() +
-                ", card_assigned_to_account=" + account.getCard_assigned_to_account() +
-                '}';
+        return "Foreign Account{" + super.account.toString();
+//                "owner_name='" + account.getOwner_name() + '\'' +
+//                ", owner_surname='" + account.getOwner_surname() + '\'' +
+//                ", acc_number=" + account.getAcc_number() +
+//                ", card_assigned_to_account=" + account.getCard_assigned_to_account() +
+//                '}';
     }
 }

@@ -15,7 +15,6 @@ public class Bank implements Obserwowany {
     }
 
     public void dodajObserwatora(Obserwator o) {
-
     }
 
     public void usunObserwatora(Obserwator o) {
