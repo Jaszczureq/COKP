@@ -1,0 +1,71 @@
+<html>
+<head>
+<title>Query.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(204,120,50); }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(98,151,85); font-style: italic; }
+.s3 { color: rgb(106,135,89); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+Query.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">sample</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s2">/** 
+ * Created by ajax on 24.05.2017. 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">Query { 
+    </span><span class="s0">private </span><span class="s1">Card card_in_query</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">private </span><span class="s1">String currency</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">private </span><span class="s1">String firm</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">private float </span><span class="s1">amount</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s0">public </span><span class="s1">Query(Card card_in_query</span><span class="s0">, </span><span class="s1">String currency</span><span class="s0">, </span><span class="s1">String firm</span><span class="s0">, float </span><span class="s1">amount) { 
+        </span><span class="s0">this</span><span class="s1">.card_in_query = card_in_query</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">this</span><span class="s1">.currency = currency</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">this</span><span class="s1">.firm=firm</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">this</span><span class="s1">.amount=amount</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">Query(Query query) { 
+        </span><span class="s0">this</span><span class="s1">.card_in_query = query.card_in_query</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">this</span><span class="s1">.currency = query.currency</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">Card getCard_in_query() { 
+        </span><span class="s0">return </span><span class="s1">card_in_query</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">String getCurrency() { 
+        </span><span class="s0">return </span><span class="s1">currency</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">setCard_in_query(Card card_in_query) { 
+        </span><span class="s0">this</span><span class="s1">.card_in_query = card_in_query</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">setCurrency(String currency) { 
+        </span><span class="s0">this</span><span class="s1">.currency = currency</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public </span><span class="s1">String toString() { 
+        </span><span class="s0">return </span><span class="s3">&quot;Query{&quot; </span><span class="s1">+ 
+                </span><span class="s3">&quot;card_in_query=&quot; </span><span class="s1">+ card_in_query + 
+                </span><span class="s3">&quot;, currency='&quot; </span><span class="s1">+ currency + </span><span class="s3">'</span><span class="s0">\'</span><span class="s3">' </span><span class="s1">+ 
+                </span><span class="s3">&quot;, firm='&quot; </span><span class="s1">+ firm + </span><span class="s3">'</span><span class="s0">\'</span><span class="s3">' </span><span class="s1">+ 
+                </span><span class="s3">&quot;, amount=&quot; </span><span class="s1">+ amount + 
+                </span><span class="s3">'}'</span><span class="s0">;</span><span class="s1"> 
+    } 
+} 
+</span></pre>
+</body>
+</html>
