@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.collections.FXCollections?>
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="302.0"
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="302.0"
          prefWidth="382.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8"
          xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <tabs>
@@ -28,6 +28,7 @@
                                   text="Debetowa"/>
                         <CheckBox fx:id="is_credit" layoutX="226.0" layoutY="37.0" mnemonicParsing="false"
                                   text="Kredytowa"/>
+
                     </children>
                 </AnchorPane>
             </content>
@@ -48,13 +49,13 @@
                                   text="Foreign"/>
                         <TextField fx:id="account_number" layoutX="14.0" layoutY="76.0" prefHeight="25.0"
                                    prefWidth="171.0" promptText="Numer konta"/>
-                        <ComboBox fx:id="box" layoutX="14.0" layoutY="109.0" >
-                            <items>
-                                <FXCollections fx:factory="observableArrayList"/>
-                            </items>
-                        </ComboBox>
                         <TextField fx:id="account_assigned_to_bank" layoutX="14.0" layoutY="109.0" prefHeight="25.0"
                                    prefWidth="171.0" promptText="Bank"/>
+                        <ComboBox fx:id="box" layoutX="14.0" layoutY="142.0" >
+                            <!--<items>-->
+                                <!--<FXCollections fx:factory="observableArrayList"/>-->
+                            <!--</items>-->
+                        </ComboBox>
                     </children>
                 </AnchorPane>
             </content>
@@ -77,13 +78,32 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TextField fx:id="bank_name" layoutX="43.0" layoutY="34.0" promptText="Nazwa Banku"/>
+                        <TextField fx:id="bank_name" layoutX="43.0" layoutY="21.0" promptText="Nazwa Banku"/>
                         <Button layoutX="217.0" layoutY="21.0" mnemonicParsing="false" onAction="#add_bank_prompt"
                                 text="Dodaj"/>
                         <Button layoutX="217.0" layoutY="58.0" mnemonicParsing="false" onAction="#delete_bank_prompt"
                                 prefHeight="25.0" prefWidth="47.0" text="Usuń"/>
                         <Button layoutX="43.0" layoutY="83.0" mnemonicParsing="false" onAction="#get_list_of_bank"
                                 prefHeight="25.0" prefWidth="132.0" text="Pokaż listę banków"/>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="Obserwator">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <TextField fx:id="obs_bank_name" layoutX="14.0" layoutY="34.0" promptText="Nazwa Banku"/>
+                        <Text text="Media" layoutX="187.0" layoutY="39.0"/>
+                        <Button layoutX="237.0" layoutY="21.0" mnemonicParsing="false" onAction="#add_media"
+                                text="Dodaj"/>
+                        <Button layoutX="237.0" layoutY="58.0" mnemonicParsing="false" onAction="#delete_media"
+                                prefHeight="25.0" prefWidth="47.0" text="Usuń"/>
+                        <Text text="KNF" layoutX="187.0" layoutY="76.0"/>
+                        <Button layoutX="297.0" layoutY="21.0" mnemonicParsing="false" onAction="#add_knf"
+                                text="Dodaj"/>
+                        <Button layoutX="297.0" layoutY="58.0" mnemonicParsing="false" onAction="#delete_knf"
+                                prefHeight="25.0" prefWidth="47.0" text="Usuń"/>
                     </children>
                 </AnchorPane>
             </content>

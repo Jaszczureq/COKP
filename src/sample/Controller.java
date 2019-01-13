@@ -3,16 +3,20 @@ package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 
-public class Controller {
+public class Controller implements Initializable {
 
     @FXML
     private TextField card_owner_name_fieldtext;
@@ -29,6 +33,8 @@ public class Controller {
 
     @FXML
     private TextField bank_name;
+    @FXML
+    TextField bank_capital;
 
     @FXML
     private TextField client_name;
@@ -74,28 +80,20 @@ public class Controller {
     private TextField search_phrase;
     private String search_cpy;
     @FXML
-//    private ComboBox box;
+    private ComboBox<String> box;
+    @FXML
+    private TextField obs_bank_name;
 
     Card_service_center card_service_center = new Card_service_center();
-    public Controller() {
-//        System.out.println("Created controller");
-//        final ObservableList<Bank> bank_obs = FXCollections.observableArrayList(card_service_center.bank_list);
-//        System.out.println("Created bank_obs");
-////        box.setItems(FXCollections.observableArrayList(card_service_center.bank_list));
-//        ArrayList<String> list = new ArrayList<String>();
-//        list.add("Test1");
-////        box.setItems(FXCollections.observableArrayList(list));
-//        list.add("Test2");
-//        System.out.println("ItemList has been set");
-//        final ObservableList<String> bank_obs2 = FXCollections.observableArrayList("s", "t", "x");
-//        ObservableList<String> options =
-//                FXCollections.observableArrayList(
-//                        "Option 1",
-//                        "Option 2",
-//                        "Option 3"
-//                );
-//        box=new ComboBox(options);
-//        box.setItems(options);
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        card_service_center.add_bank(new Bank("Name"));
+        ObservableList<String> options =
+                FXCollections.observableArrayList();
+        for (Bank bank : card_service_center.bank_list)
+            options.add(bank.bank_name);
+        box.setItems(options);
     }
 
     @FXML
@@ -144,8 +142,46 @@ public class Controller {
             return;
         }
         Bank bank = new Bank(bank_name.getText());
+        int kapital = Integer.parseInt(bank_capital.getText());
+        Media media = new Media(bank);
+        Knf knf = new Knf(bank);
+        bank.dodajObserwatora(media);
+        bank.dodajObserwatora(knf);
+        bank.zmianaStanu(kapital);
         card_service_center.add_bank(bank);
+
         System.out.println("Dodano bank");
+    }
+    private boolean check_if_contains(String bankName){
+        for (Bank bank : card_service_center.bank_list){
+            if(bank.bank_name.equals(bankName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @FXML
+    public void add_media() {
+        if (bank_name.getText().isEmpty()) {
+            System.out.println("Uzupełnij wszystkie pola!");
+            return;
+        }
+        if(check_if_contains(bank_name.getText())){
+
+        }
+    }
+
+    @FXML
+    public void delete_media() {
+    }
+
+    @FXML
+    public void add_knf() {
+    }
+
+    @FXML
+    public void delete_knf() {
     }
 
     @FXML
@@ -179,7 +215,7 @@ public class Controller {
             System.out.println("Uzupełnij wszystkie pola!");
             return;
         }
-        Client client = new AddingClients().making_clients(ClientType.ADULT);
+        Client client = new Client(client_name.getText(), client_surname.getText());
 //        Client client=new Clie
 
         for (Bank obj : card_service_center.bank_list) {
@@ -201,11 +237,11 @@ public class Controller {
         try {
             Long.parseLong(account_number.getText());
 
-            Account account =new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()), 1);
-            if(golden.isSelected())
-                account=new Account_level_golden(account,2.5);
-            if(foreign.isSelected())
-                account=new Account_level_foreign(account,"gbp");
+            Account account = new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()), 1);
+            if (golden.isSelected())
+                account = new Account_level_golden(account, 2.5);
+            if (foreign.isSelected())
+                account = new Account_level_foreign(account, "gbp");
             for (Bank obj : card_service_center.bank_list) {
                 if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
                     obj.add_account(account);
