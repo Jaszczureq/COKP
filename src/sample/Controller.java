@@ -258,7 +258,7 @@ public class Controller implements Initializable {
         try {
             Long.parseLong(account_number.getText());
 
-            Account account = new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()), 1);
+            Account account = new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()));
             if (golden.isSelected())
                 account = new Account_level_golden(account, 2.5);
             if (foreign.isSelected())
