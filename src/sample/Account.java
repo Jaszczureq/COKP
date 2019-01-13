@@ -49,6 +49,10 @@ class AccountImpl implements Account {
         this.state = new AccountClosed();
     }
 
+    public void suspend() {
+        this.state = new AccountSuspended();
+    }
+
     public AccountImpl(AccountImpl account) {
         this.owner_name = account.owner_name;
         this.owner_surname = account.owner_surname;

@@ -13,3 +13,8 @@ class AccountClosed implements AccountState {
         System.out.println("The account is closed!");
     }
 }
+class AccountSuspended implements AccountState {
+    public void credit(Account acc, int amount) {
+        System.out.println("The account is suspended!");
+    }
+}
