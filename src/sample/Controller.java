@@ -5,8 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 
 import java.io.File;
@@ -52,6 +50,8 @@ public class Controller implements Initializable {
     @FXML
     private TextField account_assigned_to_bank;
     @FXML
+    private TextField credit_amount;
+    @FXML
     private CheckBox golden;
     @FXML
     private CheckBox foreign;
@@ -80,8 +80,6 @@ public class Controller implements Initializable {
     private TextField search_phrase;
     private String search_cpy;
     @FXML
-    private ComboBox<String> box;
-    @FXML
     private TextField obs_bank_name;
 
     Card_service_center card_service_center = new Card_service_center();
@@ -93,7 +91,21 @@ public class Controller implements Initializable {
                 FXCollections.observableArrayList();
         for (Bank bank : card_service_center.bank_list)
             options.add(bank.bank_name);
-        box.setItems(options);
+    }
+
+    private Account find_account() {
+        for (Bank bank : card_service_center.bank_list) {
+            if (bank.getBank_name().equals(card_bank_assigned_fieldtext.getText())) {
+                for (Account acc : bank.list_of_acc_in_bank) {
+                    if (acc.getOwner_name().equals(account_owner_name.getText()) && acc.getOwner_surname().equals(account_owner_surname.getText())) {
+                        if (acc.getAcc_number() == Long.parseLong(account_number.getText())) {
+                            return acc;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     @FXML
@@ -107,11 +119,14 @@ public class Controller implements Initializable {
             return;
         }
 
-
         for (Bank obj : card_service_center.bank_list) {
             if (obj.bank_name.equals(card_bank_assigned_fieldtext.getText())) {
                 for (Account acc : obj.list_of_acc_in_bank) {
                     if (acc.getOwner_name().equals(card_owner_name_fieldtext.getText()) && acc.getOwner_surname().equals(card_owner_surname_fieldtext.getText())) {
+                        if (acc.getState() instanceof AccountClosed || acc.getState() instanceof AccountSuspended) {
+                            acc.getState().credit(acc, 1);
+                            return;
+                        }
                         if (is_credit.isSelected() && !is_debit.isSelected()) {
                             Credit new_card = new Credit(Long.parseLong(card_number_fieldtext.getText()), card_owner_name_fieldtext.getText(),
                                     card_owner_surname_fieldtext.getText(), card_bank_assigned_fieldtext.getText());
@@ -130,7 +145,6 @@ public class Controller implements Initializable {
                 }
             }
         }
-
         System.out.println("Brak konta o podanych danych");
     }
 
@@ -143,18 +157,21 @@ public class Controller implements Initializable {
         }
         Bank bank = new Bank(bank_name.getText());
         int kapital = Integer.parseInt(bank_capital.getText());
+
         Media media = new Media(bank);
         Knf knf = new Knf(bank);
         bank.dodajObserwatora(media);
         bank.dodajObserwatora(knf);
+
         bank.zmianaStanu(kapital);
         card_service_center.add_bank(bank);
 
         System.out.println("Dodano bank");
     }
-    private boolean check_if_contains(String bankName){
-        for (Bank bank : card_service_center.bank_list){
-            if(bank.bank_name.equals(bankName)){
+
+    private boolean check_if_contains(String bankName) {
+        for (Bank bank : card_service_center.bank_list) {
+            if (bank.bank_name.equals(bankName)) {
                 return true;
             }
         }
@@ -163,25 +180,30 @@ public class Controller implements Initializable {
 
     @FXML
     public void add_media() {
+        System.out.println("dodaj media");
         if (bank_name.getText().isEmpty()) {
             System.out.println("Uzupełnij wszystkie pola!");
             return;
         }
-        if(check_if_contains(bank_name.getText())){
-
+        for (Bank bank : card_service_center.bank_list) {
+            if (bank.bank_name == bank_name.getText()) {
+            }
         }
     }
 
     @FXML
     public void delete_media() {
+        System.out.println("usun media");
     }
 
     @FXML
     public void add_knf() {
+        System.out.println("dodaj knf");
     }
 
     @FXML
     public void delete_knf() {
+        System.out.println("usun knf");
     }
 
     @FXML
@@ -216,7 +238,6 @@ public class Controller implements Initializable {
             return;
         }
         Client client = new Client(client_name.getText(), client_surname.getText());
-//        Client client=new Clie
 
         for (Bank obj : card_service_center.bank_list) {
             if (obj.bank_name.equals(client_assigned_to_bank.getText())) {
@@ -253,6 +274,14 @@ public class Controller implements Initializable {
         } catch (NumberFormatException e) {
             System.out.println("Wystąpił błąd - podaj odpowiedni numer karty");
         }
+    }
+
+    @FXML
+    public void take_credit() {
+        Account acc = find_account();
+        int amount=Integer.parseInt(credit_amount.getText());
+
+        acc.getState().credit(acc, amount);
     }
 
     @FXML
@@ -302,7 +331,6 @@ public class Controller implements Initializable {
                     return;
                 }
             }
-
 
             for (Bank bank : card_service_center.bank_list) {
                 for (Account account : bank.list_of_acc_in_bank) {
@@ -375,19 +403,6 @@ public class Controller implements Initializable {
             ex.printStackTrace();
         }
     }
-
-//    @FXML
-//    public void archive_read_from_file(String[] args) throws IOException {
-//        try
-//        {
-//            for( String s : new FileLineIterable( args[0] ) )
-//                System.out.println( s );
-//        }
-//        catch( Exception ex )
-//        {
-//            ex.printStackTrace();
-//        }
-//    }
 
     @FXML
     public void search() {

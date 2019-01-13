@@ -17,9 +17,14 @@ public interface Account {
     int getBalance();
 
     void setBalance(int balance);
+
+    AccountState getState();
+
+    long getAcc_number();
 }
 
 class AccountImpl implements Account {
+
 
     private AccountState state = null;
     private String owner_name;
@@ -33,11 +38,10 @@ class AccountImpl implements Account {
     public AccountImpl() {
     }
 
-    public AccountImpl(String owner_name, String owner_surname, int acc_number, float interest_rate) {
+    public AccountImpl(String owner_name, String owner_surname, int acc_number) {
         this.owner_name = owner_name;
         this.owner_surname = owner_surname;
         this.acc_number = acc_number;
-//        this.interest_rate = interest_rate;                     //
         this.state = new AccountOpen();
     }
 
@@ -76,6 +80,11 @@ class AccountImpl implements Account {
     @Override
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public AccountState getState() {
+        return state;
     }
 
 //    public float getInterest_rate() {
@@ -162,8 +171,18 @@ abstract class Account_level implements Account {
     }
 
     @Override
+    public long getAcc_number() {
+        return account.getAcc_number();
+    }
+
+    @Override
     public int getBalance() {
         return account.getBalance();
+    }
+
+    @Override
+    public AccountState getState() {
+        return account.getState();
     }
 
     @Override
@@ -211,11 +230,6 @@ class Account_level_golden extends Account_level {
     @Override
     public String toString() {
         return "Golden Account{" + super.account.toString();
-//                "owner_name='" + account.getOwner_name() + '\'' +
-//                ", owner_surname='" + account.getOwner_surname() + '\'' +
-//                ", acc_number=" + account.getAcc_number() +
-//                ", card_assigned_to_account=" + account.getCard_assigned_to_account() +
-//                '}';
     }
 }
 
@@ -238,10 +252,5 @@ class Account_level_foreign extends Account_level {
     @Override
     public String toString() {
         return "Foreign Account{" + super.account.toString();
-//                "owner_name='" + account.getOwner_name() + '\'' +
-//                ", owner_surname='" + account.getOwner_surname() + '\'' +
-//                ", acc_number=" + account.getAcc_number() +
-//                ", card_assigned_to_account=" + account.getCard_assigned_to_account() +
-//                '}';
     }
 }

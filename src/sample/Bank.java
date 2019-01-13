@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Bank implements Obserwowany {
     public String bank_name;
-    //public int bank_capital;
     public List<Account> list_of_acc_in_bank = new ArrayList<Account>();
     public List<Client> list_of_clients = new ArrayList<Client>();
     private ArrayList<Obserwator> obserwatorzy;
