@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -86,19 +87,43 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        card_service_center.add_bank(new Bank("Name"));
+//        card_service_center.add_bank(new Bank("Name"));
         ObservableList<String> options =
                 FXCollections.observableArrayList();
         for (Bank bank : card_service_center.bank_list)
             options.add(bank.bank_name);
+        prepareStuff();
+    }
+
+    private void prepareStuff() {
+        String bank_name = "TestBank", name = "Imie", surname = "Nazwisko";
+        int capital = 15000, acc_number = 12349876, credit_amount = 1000, card_number = 15263748;
+        Bank bank = new Bank(bank_name, capital);
+        card_service_center.add_bank(bank);
+        Client client = new Client(name, surname);
+        bank.add_client(client);
+        Account account = new Account_level_foreign(new AccountImpl(name, surname, acc_number));
+        bank.add_account(account);
+        Card card = new Debit(card_number, name, surname, bank.getBank_name());
+        account.add_card(card);
+
+        account.credit(credit_amount);
     }
 
     private Account find_account() {
+        if (account_owner_name.getText().isEmpty()
+                || account_owner_surname.getText().isEmpty()
+                || account_number.getText().isEmpty()
+                || account_assigned_to_bank.getText().isEmpty()) {
+            System.out.println("Uzupełnij wszystkie pola!");
+            return null;
+        }
         for (Bank bank : card_service_center.bank_list) {
-            if (bank.getBank_name().equals(card_bank_assigned_fieldtext.getText())) {
+            if (bank.getBank_name().equals(account_assigned_to_bank.getText())) {
                 for (Account acc : bank.list_of_acc_in_bank) {
                     if (acc.getOwner_name().equals(account_owner_name.getText()) && acc.getOwner_surname().equals(account_owner_surname.getText())) {
                         if (acc.getAcc_number() == Long.parseLong(account_number.getText())) {
+//                            System.out.println(acc.toString());
                             return acc;
                         }
                     }
@@ -151,59 +176,107 @@ public class Controller implements Initializable {
 
     @FXML
     public void add_bank_prompt() {
-        if (bank_name.getText().isEmpty()) {
+        if (bank_name.getText().isEmpty() || bank_capital.getText().isEmpty()) {
             System.out.println("Uzupełnij wszystkie pola!");
             return;
         }
-        Bank bank = new Bank(bank_name.getText());
-        int kapital = Integer.parseInt(bank_capital.getText());
+        Bank bank = new Bank(bank_name.getText(), Integer.parseInt(bank_capital.getText()));
+//        int kapital = Integer.parseInt(bank_capital.getText());
 
-        Media media = new Media(bank);
-        Knf knf = new Knf(bank);
-        bank.dodajObserwatora(media);
-        bank.dodajObserwatora(knf);
-
-        bank.zmianaStanu(kapital);
+//        bank.zmianaStanu(kapital);
         card_service_center.add_bank(bank);
 
         System.out.println("Dodano bank");
     }
 
-    private boolean check_if_contains(String bankName) {
-        for (Bank bank : card_service_center.bank_list) {
-            if (bank.bank_name.equals(bankName)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private boolean check_if_contains(String bankName) {
+//        for (Bank bank : card_service_center.bank_list) {
+//            if (bank.bank_name.equals(bankName)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     @FXML
     public void add_media() {
-        System.out.println("dodaj media");
-        if (bank_name.getText().isEmpty()) {
+        if (obs_bank_name.getText().isEmpty()) {
             System.out.println("Uzupełnij wszystkie pola!");
             return;
         }
+
         for (Bank bank : card_service_center.bank_list) {
-            if (bank.bank_name == bank_name.getText()) {
+            if (bank.bank_name == null ? obs_bank_name.getText() == null : bank.bank_name.equals(obs_bank_name.getText())) {
+                Media media = Media.getInstance();
+                bank.dodajObserwatora(media);
+                break;
             }
         }
     }
 
     @FXML
     public void delete_media() {
-        System.out.println("usun media");
+        if (obs_bank_name.getText().isEmpty()) {
+            System.out.println("Uzupełnij wszystkie pola!");
+            return;
+        }
+
+        for (Bank bank : card_service_center.bank_list) {
+            if (bank.bank_name == null ? obs_bank_name.getText() == null : bank.bank_name.equals(obs_bank_name.getText())) {
+                Media media = Media.getInstance();
+                bank.usunObserwatora(media);
+                break;
+            }
+        }
     }
 
     @FXML
     public void add_knf() {
-        System.out.println("dodaj knf");
+        if (obs_bank_name.getText().isEmpty()) {
+            System.out.println("Uzupełnij wszystkie pola!");
+            return;
+        }
+
+        for (Bank bank : card_service_center.bank_list) {
+            if (bank.bank_name == null ? obs_bank_name.getText() == null : bank.bank_name.equals(obs_bank_name.getText())) {
+                Knf knf = Knf.getInstance();
+                bank.dodajObserwatora(knf);
+                break;
+            }
+        }
     }
 
     @FXML
     public void delete_knf() {
-        System.out.println("usun knf");
+        if (obs_bank_name.getText().isEmpty()) {
+            System.out.println("Uzupełnij wszystkie pola!");
+            return;
+        }
+
+        for (Bank bank : card_service_center.bank_list) {
+            if (bank.bank_name == null ? obs_bank_name.getText() == null : bank.bank_name.equals(obs_bank_name.getText())) {
+                Knf knf = Knf.getInstance();
+                bank.usunObserwatora(knf);
+                break;
+            }
+        }
+    }
+
+    @FXML
+    public void change_kapital() {
+        if (obs_bank_name.getText().isEmpty()) {
+            System.out.println("Uzupełnij wszystkie pola!");
+            return;
+        }
+
+        for (Bank bank : card_service_center.bank_list) {
+            if (bank.bank_name.equals(obs_bank_name.getText())) {
+                Random random = new Random();
+                int value = random.nextInt(1000000) + 40;
+                bank.zmianaStanu(value);
+                return;
+            }
+        }
     }
 
     @FXML
@@ -213,9 +286,7 @@ public class Controller implements Initializable {
             return;
         }
         try {
-
             card_service_center.delete_bank(bank_name.getText());
-
         } catch (NullPointerException e) {
             System.out.println("Brak podanego banku w bazie");
         }
@@ -262,7 +333,7 @@ public class Controller implements Initializable {
             if (golden.isSelected())
                 account = new Account_level_golden(account, 2.5);
             if (foreign.isSelected())
-                account = new Account_level_foreign(account, "gbp");
+                account = new Account_level_foreign(account);
             for (Bank obj : card_service_center.bank_list) {
                 if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
                     obj.add_account(account);
@@ -278,10 +349,39 @@ public class Controller implements Initializable {
 
     @FXML
     public void take_credit() {
+        if (credit_amount.getText().isEmpty()) {
+            System.out.println("Uzupełnij wszystkie pola!:credit");
+            return;
+        }
         Account acc = find_account();
-        int amount=Integer.parseInt(credit_amount.getText());
+        if (acc == null) {
+            System.out.println("Nie ma takiego konta z banku");
+            return;
+        }
+        int amount = Integer.parseInt(credit_amount.getText());
 
-        acc.getState().credit(acc, amount);
+        acc.credit(amount);
+    }
+
+    @FXML
+    public void open_account() {
+        Account acc = find_account();
+        acc.setState(new AccountOpen());
+        System.out.println("Konto zostało otwarte");
+    }
+
+    @FXML
+    public void close_account() {
+        Account acc = find_account();
+        acc.setState(new AccountClosed());
+        System.out.println("Konto zostało zamkniete");
+    }
+
+    @FXML
+    public void suspend_account() {
+        Account acc = find_account();
+        acc.setState(new AccountSuspended());
+        System.out.println("Konto zostało zawieszone");
     }
 
     @FXML
@@ -338,6 +438,10 @@ public class Controller implements Initializable {
                         if (card.getCard_number() == card_number_meth) {
                             boolean decision = Math.random() < 0.8;
                             if (decision) {
+                                if (account instanceof Account_level_foreign == false && !query_currency.getText().toLowerCase().equals("pln")) {
+                                    System.out.println("Podane konto nie jest kontem zagranicznym");
+                                    return;
+                                }
                                 Query query = new Query(card, query_currency.getText(), query_firm_name.getText(), query_amount_meth);
                                 card_service_center.add_query(query);
                                 System.out.println("Transakcja zaakceptowana");

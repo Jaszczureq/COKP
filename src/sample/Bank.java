@@ -15,18 +15,41 @@ public class Bank implements Obserwowany {
         obserwatorzy = new ArrayList<Obserwator>();
     }
 
+    public Bank(String bank_name, int aktualnystan) {
+        this();
+        this.bank_name = bank_name;
+        this.aktualnystan = aktualnystan;
+    }
+
+    public Bank(Bank bank) {
+        this.bank_name = bank.bank_name;
+        this.aktualnystan = bank.aktualnystan;
+        this.list_of_acc_in_bank = bank.list_of_acc_in_bank;
+
+    }
+
     public void dodajObserwatora(Obserwator o) {
         obserwatorzy.add(o);
+        o.dodajBank(this);
+        String temp = o.getClass().getName().replace("sample.", "");
+        System.out.println("Dodano  obserwatora typu: " + temp);
     }
 
     public void usunObserwatora(Obserwator o) {
         int index = obserwatorzy.indexOf(o);
+        String temp = o.getClass().getName().replace("sample.", "");
+        if (index < 0) {
+            System.out.println("Brak obserwatorów typu: " + temp);
+            return;
+        }
         obserwatorzy.remove(index);
+        o.usunBank(this);
+        System.out.println("Usunięto obserwatora typu: " + temp);
     }
 
     public void powiadamiajObserwatorow() {
         for (Obserwator o : obserwatorzy) {
-            o.update(aktualnystan, poziom_bezp);
+            o.update(this);
         }
     }
 
@@ -49,19 +72,6 @@ public class Bank implements Obserwowany {
     public int getResults() {
 
         return aktualnystan;
-    }
-
-    public Bank(String bank_name) {
-        this();
-        this.bank_name = bank_name;
-        // this.bank_capital=bank_capital;
-    }
-
-    public Bank(Bank bank) {
-        this.bank_name = bank.bank_name;
-        // this.bank_capital=bank.bank_capital;
-        this.list_of_acc_in_bank = bank.list_of_acc_in_bank;
-
     }
 
     public String getBank_name() {
@@ -108,17 +118,30 @@ public class Bank implements Obserwowany {
         list_of_clients.add(client);
     }
 
+    public int getAktualnystan() {
+        return aktualnystan;
+    }
+
+    public void setAktualnystan(int aktualnystan) {
+        this.aktualnystan = aktualnystan;
+    }
+
+    public int getPoziom_bezp() {
+        return poziom_bezp;
+    }
+
+    public void setPoziom_bezp(int poziom_bezp) {
+        this.poziom_bezp = poziom_bezp;
+    }
+
 
     @Override
     public String toString() {
-        String value = "Bank{" +
+        return "Bank{" +
                 "bank_name='" + bank_name + '\'' +
+                ", bank_capital='" + aktualnystan + '\'' +
                 ", list_of_acc_in_bank=" + list_of_acc_in_bank +
-                ", list_of_clients=" + list_of_clients;
-        for (Obserwator o : obserwatorzy) {
-            value += o.toString();
-        }
-        value += '}';
-        return value;
+                ", list_of_clients=" + list_of_clients +
+                "}\n";
     }
 }

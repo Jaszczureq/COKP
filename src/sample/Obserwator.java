@@ -3,5 +3,7 @@ package sample;
 interface Obserwator {
 
     /* aktualizuje dane */
-    public void update(int aktualnystan, int poziom_bezp);
+    public void update(Bank bank);
+    public void dodajBank(Bank bank);
+    public void usunBank(Bank bank);
 }

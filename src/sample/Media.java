@@ -1,34 +1,47 @@
 package sample;
 
+import java.util.ArrayList;
+
 class Media implements Obserwator, Informowanie {
-    private int aktualnystan;
-    private int poziom_bezp;
-    private Bank bank;
-
-    public Media(Bank bank) {
-
-        this.bank = bank;
+    private ArrayList<Bank> banki;
+    private static Media media;
+    
+    private Media() {
+        banki = new ArrayList<Bank>();
     }
 
-    public void update(int t1, int t2) {
-
-        aktualnystan = t1;
-        poziom_bezp = t2;
-
-        informuj();
+    public static Media getInstance() {
+        if (media == null) media = new Media();
+        return media;
     }
 
-    public void informuj() {
-        System.out.println("Nastąpiła aktualizacja danych w Mediach");
+    
+    public void update(Bank bank) {
+        int index = banki.indexOf(bank);
+        if (index == -1) {
+            System.out.println("Brak banku");
+            return;
+        }
+        
+        Bank istniejacyBank = banki.get(index);
+        istniejacyBank.setAktualnystan(bank.getAktualnystan());
+        istniejacyBank.setPoziom_bezp(bank.getPoziom_bezp());
+        
+        informuj(bank);
     }
 
-    @Override
-    public String toString() {
-        return "Media:{stan:" + aktualnystan +
-                "   bezpieczenstwo: " + poziom_bezp + "}";
+    public void informuj(Bank bank) {
+        System.out.println("Nastąpiła aktualizacja danych w Media.");        
+        System.out.println("Nazwa banku: " + bank.getBank_name());        
+        System.out.println("Aktualny stan: " + bank.getAktualnystan());
+        System.out.println("Poziom bezpieczeństwa: " + (bank.getPoziom_bezp() + 1));
     }
-
-    public void usun() {
-        bank.usunObserwatora(this);
+    
+    public void dodajBank(Bank bank) {
+        banki.add(bank);
+    }
+    
+    public void usunBank(Bank bank) {
+        banki.remove(bank);
     }
 }

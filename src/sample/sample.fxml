@@ -44,24 +44,24 @@
                                    prefWidth="171.0" promptText="Imię posiadacza konta"/>
                         <TextField fx:id="account_owner_surname" layoutX="14.0" layoutY="45.0" prefHeight="25.0"
                                    prefWidth="171.0" promptText="Nazwisko posiadacza konta"/>
+                        <TextField fx:id="account_number" layoutX="14.0" layoutY="76.0" prefHeight="25.0"
+                                   prefWidth="171.0" promptText="Numer konta"/>
+                        <TextField fx:id="account_assigned_to_bank" layoutX="14.0" layoutY="109.0" prefHeight="25.0"
+                                   prefWidth="171.0" promptText="Bank"/>
                         <Button layoutX="211.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_account"
                                 text="Utwórz konto"/>
                         <CheckBox fx:id="golden" layoutX="226.0" layoutY="44.0" mnemonicParsing="false" text="Golden"/>
                         <CheckBox fx:id="foreign" layoutX="226.0" layoutY="62.0" mnemonicParsing="false"
                                   text="Foreign"/>
-                        <TextField fx:id="account_number" layoutX="14.0" layoutY="76.0" prefHeight="25.0"
-                                   prefWidth="171.0" promptText="Numer konta"/>
-                        <TextField fx:id="account_assigned_to_bank" layoutX="14.0" layoutY="109.0" prefHeight="25.0"
-                                   prefWidth="171.0" promptText="Bank"/>
                         <TextField fx:id="credit_amount" layoutX="14.0" layoutY="177.0" prefHeight="25.0" prefWidth="166.0"
                                    promptText="Kwota kredytu"/>
                         <Button layoutX="211.0" layoutY="177.0" mnemonicParsing="false" onAction="#take_credit"
                                 text="Weź kredyt"/>
-                        <Button layoutX="14.0" layoutY="217.0" mnemonicParsing="false" onAction="#add_account"
+                        <Button layoutX="14.0" layoutY="217.0" mnemonicParsing="false" onAction="#open_account"
                                 text="Otwórz konto"/>
-                        <Button layoutX="212.0" layoutY="217.0" mnemonicParsing="false" onAction="#add_account"
+                        <Button layoutX="212.0" layoutY="217.0" mnemonicParsing="false" onAction="#close_account"
                                 text="Zamknij konto"/>
-                        <Button layoutX="114.0" layoutY="217.0" mnemonicParsing="false" onAction="#add_account"
+                        <Button layoutX="114.0" layoutY="217.0" mnemonicParsing="false" onAction="#suspend_account"
                                 text="Zawieś konto"/>
                         <!--<ComboBox fx:id="box" layoutX="14.0" layoutY="142.0"/>-->
                     </children>
@@ -74,10 +74,10 @@
                     <children>
                         <TextField fx:id="client_name" layoutX="14.0" layoutY="14.0" promptText="Imię"/>
                         <TextField fx:id="client_surname" layoutX="14.0" layoutY="45.0" promptText="Nazwisko"/>
-                        <Button layoutX="181.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_client"
-                                text="Dodaj"/>
                         <TextField fx:id="client_assigned_to_bank" layoutX="14.0" layoutY="78.0"
                                    promptText="Należy do banku"/>
+                        <Button layoutX="181.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_client"
+                                text="Dodaj"/>
                     </children>
                 </AnchorPane>
             </content>
@@ -113,6 +113,8 @@
                                 text="Dodaj"/>
                         <Button layoutX="297.0" layoutY="58.0" mnemonicParsing="false" onAction="#delete_knf"
                                 text="Usuń"/>
+                        <Button layoutX="187.0" layoutY="98.0" mnemonicParsing="false" onAction="#change_kapital"
+                                prefHeight="25.0" prefWidth="132.0" text="Zmień kapitał"/>
                     </children>
                 </AnchorPane>
             </content>

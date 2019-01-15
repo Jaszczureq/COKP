@@ -21,6 +21,10 @@ public interface Account {
     AccountState getState();
 
     long getAcc_number();
+
+    void credit(int amount);
+
+    void setState(AccountState state);
 }
 
 class AccountImpl implements Account {
@@ -33,10 +37,6 @@ class AccountImpl implements Account {
     //    private float interest_rate;                                    //
     public long acc_number;
     public List<Card> card_assigned_to_account = new ArrayList<Card>();
-
-
-    public AccountImpl() {
-    }
 
     public AccountImpl(String owner_name, String owner_surname, int acc_number) {
         this.owner_name = owner_name;
@@ -87,7 +87,11 @@ class AccountImpl implements Account {
         return state;
     }
 
-//    public float getInterest_rate() {
+    @Override
+    public void setState(AccountState state) {
+        this.state = state;
+    }
+    //    public float getInterest_rate() {
 //        return interest_rate;
 //}   //
 //
@@ -147,8 +151,9 @@ class AccountImpl implements Account {
                 "owner_name='" + owner_name + '\'' +
                 ", owner_surname='" + owner_surname + '\'' +
                 ", acc_number=" + acc_number +
-                ", card_assigned_to_account=" + card_assigned_to_account +
-                '}';
+                ", acc_balance=" + balance +
+                ", card_assigned_to_account=\n\t\t" + card_assigned_to_account +
+                "}";
     }
 }
 
@@ -164,7 +169,6 @@ abstract class Account_level implements Account {
 
         return null;
     }
-
     @Override
     public void setBalance(int balance) {
         account.setBalance(balance);
@@ -204,6 +208,16 @@ abstract class Account_level implements Account {
     public List<Card> getCard_assigned_to_account() {
         return account.getCard_assigned_to_account();
     }
+
+    @Override
+    public void credit(int amount) {
+        account.credit(amount);
+    }
+
+    @Override
+    public void setState(AccountState state) {
+        account.setState(state);
+    }
 }
 
 class Account_level_golden extends Account_level {
@@ -234,20 +248,20 @@ class Account_level_golden extends Account_level {
 }
 
 class Account_level_foreign extends Account_level {
-    private String currency;
+//    private String currency;
 
-    public Account_level_foreign(Account acc, String cur) {
+    public Account_level_foreign(Account acc) {
         super(acc);
-        this.currency = cur;
+//        this.currency = cur;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
+//    public String getCurrency() {
+//        return currency;
+//    }
+//
+//    public void setCurrency(String currency) {
+//        this.currency = currency;
+//    }
 
     @Override
     public String toString() {
