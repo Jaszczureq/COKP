@@ -3,86 +3,82 @@ package sample;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bank implements Obserwowany {
+public class Bank implements Subject {
     public String bank_name;
     public List<Account> list_of_acc_in_bank = new ArrayList<Account>();
     public List<Client> list_of_clients = new ArrayList<Client>();
-    private ArrayList<Obserwator> obserwatorzy;
-    private int aktualnystan;
-    private int poziom_bezp;
+    private ArrayList<Observer> subjects;
+    private int current_balance;
+    private int security_level;
 
     public Bank() {
-        obserwatorzy = new ArrayList<Obserwator>();
+        subjects = new ArrayList<Observer>();
     }
 
-    public Bank(String bank_name, int aktualnystan) {
+    public Bank(String bank_name, int current_balance) {
         this();
         this.bank_name = bank_name;
-        this.aktualnystan = aktualnystan;
+        this.current_balance = current_balance;
     }
 
     public Bank(Bank bank) {
         this.bank_name = bank.bank_name;
-        this.aktualnystan = bank.aktualnystan;
+        this.current_balance = bank.current_balance;
         this.list_of_acc_in_bank = bank.list_of_acc_in_bank;
 
     }
 
-    public void dodajObserwatora(Obserwator o) {
-        if(obserwatorzy.contains(o))
+    public void addObserver(Observer o) {
+        if (subjects.contains(o))
             return;
-        obserwatorzy.add(o);
-        o.dodajBank(this);
+        subjects.add(o);
+        o.addBank(this);
         String temp = o.getClass().getName().replace("sample.", "");
         System.out.println("Dodano  obserwatora typu: " + temp);
     }
 
-    public void usunObserwatora(Obserwator o) {
-        int index = obserwatorzy.indexOf(o);
+    public void removeObserver(Observer o) {
+        int index = subjects.indexOf(o);
         String temp = o.getClass().getName().replace("sample.", "");
         if (index < 0) {
             System.out.println("Brak obserwatorów typu: " + temp);
             return;
         }
-        obserwatorzy.remove(index);
-        o.usunBank(this);
+        subjects.remove(index);
+        o.removeBank(this);
         System.out.println("Usunięto obserwatora typu: " + temp);
     }
 
-    public void powiadamiajObserwatorow() {
-        for (Obserwator o : obserwatorzy) {
+    public void notifyObservers() {
+        for (Observer o : subjects) {
             o.update(this);
         }
     }
 
-    public void zmianaStanu(int stan) {
-        aktualnystan = stan;
-        if (aktualnystan > 1000000) {
-            poziom_bezp = 3;
+    public void balanceChanged(int stan) {
+        current_balance = stan;
+        if (current_balance > 1000000) {
+            security_level = 3;
         }
-        if (aktualnystan <= 1000000) {
+        if (current_balance <= 1000000) {
             {
-                poziom_bezp = 2;
+                security_level = 2;
             }
-            if (aktualnystan <= 500000) {
-                poziom_bezp = 1;
+            if (current_balance <= 500000) {
+                security_level = 1;
             }
         }
-        powiadamiajObserwatorow();
+        notifyObservers();
     }
 
     public int getResults() {
 
-        return aktualnystan;
+        return current_balance;
     }
 
     public String getBank_name() {
         return bank_name;
     }
-
-    // public int getBank_capital() {
-    //     return bank_capital;
-    // }
 
     public List<Account> getList_of_acc_in_bank() {
         return list_of_acc_in_bank;
@@ -91,10 +87,6 @@ public class Bank implements Obserwowany {
     public void setBank_name(String bank_name) {
         this.bank_name = bank_name;
     }
-
-    //   public void setBank_capital(int bank_capital) {
-    //      this.bank_capital = bank_capital;
-    //  }
 
     public void setList_of_acc_in_bank(List<Account> list_of_acc_in_bank) {
         this.list_of_acc_in_bank = list_of_acc_in_bank;
@@ -120,20 +112,20 @@ public class Bank implements Obserwowany {
         list_of_clients.add(client);
     }
 
-    public int getAktualnystan() {
-        return aktualnystan;
+    public int getCurrent_balance() {
+        return current_balance;
     }
 
-    public void setAktualnystan(int aktualnystan) {
-        this.aktualnystan = aktualnystan;
+    public void setCurrent_balance(int current_balance) {
+        this.current_balance = current_balance;
     }
 
-    public int getPoziom_bezp() {
-        return poziom_bezp;
+    public int getSecurity_level() {
+        return security_level;
     }
 
-    public void setPoziom_bezp(int poziom_bezp) {
-        this.poziom_bezp = poziom_bezp;
+    public void setSecurity_level(int security_level) {
+        this.security_level = security_level;
     }
 
 
@@ -141,7 +133,7 @@ public class Bank implements Obserwowany {
     public String toString() {
         return "Bank{" +
                 "bank_name='" + bank_name + '\'' +
-                ", bank_capital='" + aktualnystan + '\'' +
+                ", bank_capital='" + current_balance + '\'' +
                 ", list_of_acc_in_bank=" + list_of_acc_in_bank +
                 ", list_of_clients=" + list_of_clients +
                 "}\n";

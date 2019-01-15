@@ -2,12 +2,12 @@ package sample;
 
 import java.util.ArrayList;
 
-class Media implements Obserwator, Informowanie {
-    private ArrayList<Bank> banki;
+class Media implements Observer, Notifications {
+    private ArrayList<Bank> banks;
     private static Media media;
 
     private Media() {
-        banki = new ArrayList<Bank>();
+        banks = new ArrayList<Bank>();
     }
 
     public static Media getInstance() {
@@ -16,32 +16,32 @@ class Media implements Obserwator, Informowanie {
     }
 
     public void update(Bank bank) {
-        int index = banki.indexOf(bank);
+        int index = banks.indexOf(bank);
         if (index == -1) {
             System.out.println("Brak banku");
             return;
         }
 
-        Bank istniejacyBank = banki.get(index);
-        istniejacyBank.setAktualnystan(bank.getAktualnystan());
-        istniejacyBank.setPoziom_bezp(bank.getPoziom_bezp());
+        Bank existingBank = banks.get(index);
+        existingBank.setCurrent_balance(bank.getCurrent_balance());
+        existingBank.setSecurity_level(bank.getSecurity_level());
 
-        informuj(bank);
+        inform(bank);
     }
 
-    public void informuj(Bank bank) {
+    public void inform(Bank bank) {
         System.out.println("Nastąpiła aktualizacja danych w Media.");
         System.out.println("Nazwa banku: " + bank.getBank_name());
-        System.out.println("Aktualny stan: " + bank.getAktualnystan());
-        System.out.println("Poziom bezpieczeństwa: " + (bank.getPoziom_bezp() + 1));
+        System.out.println("Aktualny stan: " + bank.getCurrent_balance());
+        System.out.println("Poziom bezpieczeństwa: " + (bank.getSecurity_level() + 1));
     }
 
-    public void dodajBank(Bank bank) {
-        banki.add(bank);
+    public void addBank(Bank bank) {
+        banks.add(bank);
     }
 
-    public void usunBank(Bank bank) {
-        banki.remove(bank);
+    public void removeBank(Bank bank) {
+        banks.remove(bank);
     }
 
 //    public static IConnection getConnection(){

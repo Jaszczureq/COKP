@@ -183,7 +183,7 @@ public class Controller implements Initializable {
         Bank bank = new Bank(bank_name.getText(), Integer.parseInt(bank_capital.getText()));
 //        int kapital = Integer.parseInt(bank_capital.getText());
 
-//        bank.zmianaStanu(kapital);
+//        bank.balanceChanged(kapital);
         card_service_center.add_bank(bank);
 
         System.out.println("Dodano bank");
@@ -199,7 +199,7 @@ public class Controller implements Initializable {
         for (Bank bank : card_service_center.bank_list) {
             if (bank.bank_name == null ? obs_bank_name.getText() == null : bank.bank_name.equals(obs_bank_name.getText())) {
                 Media media = Media.getInstance();
-                bank.dodajObserwatora(media);
+                bank.addObserver(media);
                 break;
             }
         }
@@ -215,7 +215,7 @@ public class Controller implements Initializable {
         for (Bank bank : card_service_center.bank_list) {
             if (bank.bank_name == null ? obs_bank_name.getText() == null : bank.bank_name.equals(obs_bank_name.getText())) {
                 Media media = Media.getInstance();
-                bank.usunObserwatora(media);
+                bank.removeObserver(media);
                 break;
             }
         }
@@ -231,7 +231,7 @@ public class Controller implements Initializable {
         for (Bank bank : card_service_center.bank_list) {
             if (bank.bank_name == null ? obs_bank_name.getText() == null : bank.bank_name.equals(obs_bank_name.getText())) {
                 Knf knf = Knf.getInstance();
-                bank.dodajObserwatora(knf);
+                bank.addObserver(knf);
                 break;
             }
         }
@@ -247,7 +247,7 @@ public class Controller implements Initializable {
         for (Bank bank : card_service_center.bank_list) {
             if (bank.bank_name == null ? obs_bank_name.getText() == null : bank.bank_name.equals(obs_bank_name.getText())) {
                 Knf knf = Knf.getInstance();
-                bank.usunObserwatora(knf);
+                bank.removeObserver(knf);
                 break;
             }
         }
@@ -264,7 +264,7 @@ public class Controller implements Initializable {
             if (bank.bank_name.equals(obs_bank_name.getText())) {
                 Random random = new Random();
                 int value = random.nextInt(1000000) + 40;
-                bank.zmianaStanu(value);
+                bank.balanceChanged(value);
                 return;
             }
         }
