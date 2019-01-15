@@ -164,6 +164,10 @@ abstract class Account_level implements Account {
         this.account = acc;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
     @Override
     public String decorate() {
 

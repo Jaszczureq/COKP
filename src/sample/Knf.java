@@ -15,7 +15,6 @@ class Knf implements Obserwator, Informowanie {
         return knf;
     }
 
-    
     public void update(Bank bank) {
         int index = banki.indexOf(bank);
         if (index == -1) {

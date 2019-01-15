@@ -29,14 +29,6 @@ public class Main extends Application implements EventHandler<ActionEvent> {
     public static void main(String[] args) {
         launch(args);
 
-        Account account = new Account_level_golden(new Account_level_foreign(new AccountImpl("imie", "nazwisko", 1)), 2);
-        Account account2 = new Account_level_foreign(new AccountImpl("imie1", "nazwisko4", 1));
-        Account account3 = new Account_level_golden(new AccountImpl("imie3", "nazwisko2", 1), 2);
-
-        account.credit(100);
-
-
-
 
 
 //

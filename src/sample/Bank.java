@@ -29,6 +29,8 @@ public class Bank implements Obserwowany {
     }
 
     public void dodajObserwatora(Obserwator o) {
+        if(obserwatorzy.contains(o))
+            return;
         obserwatorzy.add(o);
         o.dodajBank(this);
         String temp = o.getClass().getName().replace("sample.", "");

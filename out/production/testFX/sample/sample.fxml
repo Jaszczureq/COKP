@@ -102,7 +102,7 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TextField fx:id="obs_bank_name" layoutX="14.0" layoutY="34.0" promptText="Nazwa Banku"/>
+                        <TextField fx:id="obs_bank_name" layoutX="14.0" layoutY="34.0" promptText="Nazwa Banku" prefWidth="140.0"/>
                         <Text layoutX="187.0" layoutY="39.0" text="Media"/>
                         <Button layoutX="237.0" layoutY="21.0" mnemonicParsing="false" onAction="#add_media"
                                 text="Dodaj"/>
@@ -160,14 +160,14 @@
                                    prefWidth="193.0" promptText="Nazwa pliku do odczytu archiwum"/>
                         <Button layoutX="230.0" layoutY="64.0" mnemonicParsing="false"
                                 onAction="#archive_read_from_file" text="Odczytaj archiwum"/>
-                        <Text layoutX="5.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                              text="Przeszukiwanie archiwum"/>
-                        <Text layoutX="20.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                              text="Co chcesz wyszukać"/>
-                        <TextField fx:id="search_phrase" layoutX="20.0" layoutY="176.0" prefHeight="25.0"
-                                   prefWidth="188.0" promptText="Szukana fraza"/>
-                        <Button layoutX="230.0" layoutY="176.0" mnemonicParsing="false" onAction="#search"
-                                text="Szukaj w archiwum"/>
+                        <!--<Text layoutX="5.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0"-->
+                              <!--text="Przeszukiwanie archiwum"/>-->
+                        <!--<Text layoutX="20.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0"-->
+                              <!--text="Co chcesz wyszukać"/>-->
+                        <!--<TextField fx:id="search_phrase" layoutX="20.0" layoutY="176.0" prefHeight="25.0"-->
+                                   <!--prefWidth="188.0" promptText="Szukana fraza"/>-->
+                        <!--<Button layoutX="230.0" layoutY="176.0" mnemonicParsing="false" onAction="#search"-->
+                                <!--text="Szukaj w archiwum"/>-->
                     </children>
                 </AnchorPane>
             </content>

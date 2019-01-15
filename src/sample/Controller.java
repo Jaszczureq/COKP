@@ -189,15 +189,6 @@ public class Controller implements Initializable {
         System.out.println("Dodano bank");
     }
 
-//    private boolean check_if_contains(String bankName) {
-//        for (Bank bank : card_service_center.bank_list) {
-//            if (bank.bank_name.equals(bankName)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
     @FXML
     public void add_media() {
         if (obs_bank_name.getText().isEmpty()) {
@@ -329,19 +320,36 @@ public class Controller implements Initializable {
         try {
             Long.parseLong(account_number.getText());
 
-            Account account = new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()));
-            if (golden.isSelected())
-                account = new Account_level_golden(account, 2.5);
-            if (foreign.isSelected())
-                account = new Account_level_foreign(account);
             for (Bank obj : card_service_center.bank_list) {
-                if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
-                    obj.add_account(account);
-                    System.out.println("Dodano konto");
-                    return;
+                for (Account acc : obj.list_of_acc_in_bank) {
+                    if (acc.getAcc_number() == Integer.parseInt(account_number.getText())) {
+                        System.out.println("Updating account");
+                        if(acc instanceof Account_level_golden || acc instanceof Account_level_foreign){
+                            Account temp=((Account_level) acc).getAccount();
+                            if (golden.isSelected())
+                                temp = new Account_level_golden(temp, 2.5);
+                            if (foreign.isSelected())
+                                temp = new Account_level_foreign(temp);
+                            obj.delete_accont(acc);
+                            obj.add_account(temp);
+                            return;
+                        }
+                    } else {
+                        if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
+                            System.out.println("Creating account");
+                            Account account = new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()));
+                            if (golden.isSelected())
+                                account = new Account_level_golden(account, 2.5);
+                            if (foreign.isSelected())
+                                account = new Account_level_foreign(account);
+                            obj.add_account(account);
+                            System.out.println("Dodano konto");
+                            return;
+                        }
+                    }
+                    System.out.println("Brak klienta o podanych danych");
                 }
             }
-            System.out.println("Brak klienta o podanych danych");
         } catch (NumberFormatException e) {
             System.out.println("Wystąpił błąd - podaj odpowiedni numer karty");
         }
@@ -366,6 +374,8 @@ public class Controller implements Initializable {
     @FXML
     public void open_account() {
         Account acc = find_account();
+        if (acc == null)
+            return;
         acc.setState(new AccountOpen());
         System.out.println("Konto zostało otwarte");
     }
@@ -373,6 +383,8 @@ public class Controller implements Initializable {
     @FXML
     public void close_account() {
         Account acc = find_account();
+        if (acc == null)
+            return;
         acc.setState(new AccountClosed());
         System.out.println("Konto zostało zamkniete");
     }
@@ -380,6 +392,8 @@ public class Controller implements Initializable {
     @FXML
     public void suspend_account() {
         Account acc = find_account();
+        if (acc == null)
+            return;
         acc.setState(new AccountSuspended());
         System.out.println("Konto zostało zawieszone");
     }
