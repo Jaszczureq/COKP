@@ -324,36 +324,40 @@ public class Controller implements Initializable {
                 for (Account acc : obj.list_of_acc_in_bank) {
                     if (acc.getAcc_number() == Integer.parseInt(account_number.getText())) {
                         System.out.println("Updating account");
-                        if(acc instanceof Account_level_golden || acc instanceof Account_level_foreign){
-                            Account temp=((Account_level) acc).getAccount();
-                            if (golden.isSelected())
-                                temp = new Account_level_golden(temp, 2.5);
-                            if (foreign.isSelected())
-                                temp = new Account_level_foreign(temp);
-                            obj.delete_accont(acc);
-                            obj.add_account(temp);
-                            return;
-                        }
-                    } else {
-                        if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
-                            System.out.println("Creating account");
-                            Account account = new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()));
-                            if (golden.isSelected())
-                                account = new Account_level_golden(account, 2.5);
-                            if (foreign.isSelected())
-                                account = new Account_level_foreign(account);
-                            obj.add_account(account);
-                            System.out.println("Dodano konto");
-                            return;
-                        }
+                        Account temp=acc;
+                        do {
+                            temp = ((Account_level) temp).getAccount();
+                        }while(temp instanceof Account_level_golden || temp instanceof Account_level_foreign);
+                        if (golden.isSelected())
+                            temp = new Account_level_golden(temp, 2.5);
+                        if (foreign.isSelected())
+                            temp = new Account_level_foreign(temp);
+                        obj.delete_account(acc);
+                        obj.add_account(temp);
+                        return;
                     }
-                    System.out.println("Brak klienta o podanych danych");
                 }
             }
+            for (Bank obj : card_service_center.bank_list) {
+                if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
+                    System.out.println("Creating account");
+                    Account account = new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()));
+                    if (golden.isSelected())
+                        account = new Account_level_golden(account, 2.5);
+                    if (foreign.isSelected())
+                        account = new Account_level_foreign(account);
+                    obj.add_account(account);
+                    System.out.println("Dodano konto");
+                    return;
+                }
+            }
+            System.out.println("Brak klienta o podanych danych");
+
         } catch (NumberFormatException e) {
             System.out.println("Wystąpił błąd - podaj odpowiedni numer karty");
         }
     }
+
 
     @FXML
     public void take_credit() {

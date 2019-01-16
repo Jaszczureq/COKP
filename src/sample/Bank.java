@@ -104,7 +104,7 @@ public class Bank implements Subject {
         list_of_acc_in_bank.add(account);
     }
 
-    public void delete_accont(Account account) {
+    public void delete_account(Account account) {
         list_of_acc_in_bank.remove(account);
     }
 
