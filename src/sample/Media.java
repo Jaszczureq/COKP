@@ -11,7 +11,11 @@ class Media implements Observer, Notifications {
     }
 
     public static Media getInstance() {
-        if (media == null) media = new Media();
+        if (media == null)
+            synchronized (Media.class) {
+                if (media == null)
+                    media = new Media();
+            }
         return media;
     }
 
