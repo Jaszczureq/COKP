@@ -134,7 +134,7 @@ public class Bank implements Subject {
         return "Bank{" +
                 "bank_name='" + bank_name + '\'' +
                 ", bank_capital='" + current_balance + '\'' +
-                ", list_of_acc_in_bank=" + list_of_acc_in_bank +
+                ", list_of_acc_in_bank=\n" + list_of_acc_in_bank +
                 ", list_of_clients=" + list_of_clients +
                 "}\n";
     }

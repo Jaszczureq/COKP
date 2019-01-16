@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
+
 
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
          prefHeight="302.0" prefWidth="382.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121"
@@ -25,12 +22,14 @@
                                    prefWidth="203.0" promptText="Numer karty"/>
                         <TextField fx:id="card_bank_assigned_fieldtext" layoutX="14.0" layoutY="105.0" prefHeight="25.0"
                                    prefWidth="200.0" promptText="Bank wydawca"/>
-                        <Button layoutX="225.0" layoutY="75.0" mnemonicParsing="false" onAction="#selectTab"
+                        <Button layoutX="225.0" layoutY="75.0" mnemonicParsing="false" onAction="#add_card_prompt"
                                 prefHeight="0.0" prefWidth="107.0" text="Dodaj kartę"/>
                         <CheckBox fx:id="is_debit" layoutX="226.0" layoutY="19.0" mnemonicParsing="false"
                                   text="Debetowa"/>
                         <CheckBox fx:id="is_credit" layoutX="226.0" layoutY="37.0" mnemonicParsing="false"
                                   text="Kredytowa"/>
+                        <Button fx:id="switchTabs" layoutX="0.0" layoutY="0.0" mnemonicParsing="false" onAction="#selectTab"
+                                prefHeight="0.0" prefWidth="0.0" text="" visible="true"/>
 
                     </children>
                 </AnchorPane>
@@ -48,6 +47,8 @@
                                    prefWidth="171.0" promptText="Numer konta"/>
                         <TextField fx:id="account_assigned_to_bank" layoutX="14.0" layoutY="109.0" prefHeight="25.0"
                                    prefWidth="171.0" promptText="Bank"/>
+                        <TextField fx:id="account_interest_rate" layoutX="226.0" layoutY="109.0" prefHeight="25.0"
+                                   prefWidth="171.0" promptText="Stopa oprocentowania"/>
                         <Button layoutX="211.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_account"
                                 text="Utwórz konto"/>
                         <CheckBox fx:id="golden" layoutX="226.0" layoutY="44.0" mnemonicParsing="false" text="Golden"/>

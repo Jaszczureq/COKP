@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -12,19 +10,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable, ActionListener {
 
+    int time=15;
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        String action=e.getActionCommand();
-        if(action.equals("Switch")){
+        String action = e.getActionCommand();
+        if (action.equals("Switch")) {
             selectTab();
         }
     }
+
     @FXML
     public void selectTab() {
         selectionModel.getSelectedIndex();
@@ -32,6 +31,7 @@ public class Controller implements Initializable, ActionListener {
         selectionModel.selectNext();
     }
 
+    //region controls
     @FXML
     private TextField card_owner_name_fieldtext;
     @FXML
@@ -66,6 +66,8 @@ public class Controller implements Initializable, ActionListener {
     @FXML
     private TextField account_assigned_to_bank;
     @FXML
+    private TextField account_interest_rate;
+    @FXML
     private TextField credit_amount;
     @FXML
     private CheckBox golden;
@@ -88,32 +90,31 @@ public class Controller implements Initializable, ActionListener {
     private TextField archive_save_file;
     @FXML
     private TextField archive_open_file;
-
-    ObservableList<String> archive_choice_status_list = FXCollections.observableArrayList("OR", "AND");
-    @FXML
-    private TextField searching_type;
-    @FXML
-    private TextField search_phrase;
-    private String search_cpy;
     @FXML
     private TextField obs_bank_name;
 
     @FXML
     private TabPane tabPane;
+    //endregion
 
-    SingleSelectionModel<Tab> selectionModel;
+    private SingleSelectionModel<Tab> selectionModel;
 
-    Card_service_center card_service_center = new Card_service_center();
+    private Card_service_center card_service_center = new Card_service_center();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        card_service_center.add_bank(new Bank("Name"));
-        ObservableList<String> options =
-                FXCollections.observableArrayList();
-        for (Bank bank : card_service_center.bank_list)
-            options.add(bank.bank_name);
         prepareStuff();
         selectionModel = tabPane.getSelectionModel();
+
+//        Main.prepButtun(switchTabs);
+//        Main.stage.getScene().getAccelerators().put(
+//                new KeyCodeCombination(KeyCode.LEFT, KeyCombination.ALT_DOWN),
+//                new Runnable() {
+//                    @Override public void run() {
+//                        switchTabs.fire();
+//                    }
+//                }
+//        );
 
     }
 
@@ -124,12 +125,13 @@ public class Controller implements Initializable, ActionListener {
         card_service_center.add_bank(bank);
         Client client = new Client(name, surname);
         bank.add_client(client);
-        Account account = new Account_level_foreign(new AccountImpl(name, surname, acc_number));
+        Account account = new Account_level_golden(new AccountImpl(name, surname, acc_number), 10.0);
         bank.add_account(account);
         Card card = new Debit(card_number, name, surname, bank.getBank_name());
         account.add_card(card);
 
         account.credit(credit_amount);
+        new Reminder(time);
     }
 
     private Account find_account() {
@@ -145,7 +147,6 @@ public class Controller implements Initializable, ActionListener {
                 for (Account acc : bank.list_of_acc_in_bank) {
                     if (acc.getOwner_name().equals(account_owner_name.getText()) && acc.getOwner_surname().equals(account_owner_surname.getText())) {
                         if (acc.getAcc_number() == Long.parseLong(account_number.getText())) {
-//                            System.out.println(acc.toString());
                             return acc;
                         }
                     }
@@ -373,8 +374,13 @@ public class Controller implements Initializable, ActionListener {
                         if (temp.getName().equals(account_owner_name.getText()) && temp.getSurname().equals(account_owner_surname.getText())) {
 
                             Account account = new AccountImpl(temp.getName(), temp.getSurname(), Integer.parseInt(account_number.getText()));
-                            if (golden.isSelected())
-                                account = new Account_level_golden(account, 2.5);
+                            if (golden.isSelected()) {
+                                if (account_interest_rate.getText().isEmpty()) {
+                                    System.out.println("Uzupełnij wszystkie pola!");
+                                    return;
+                                }
+                                account = new Account_level_golden(account, Double.parseDouble(account_interest_rate.getText()));
+                            }
                             if (foreign.isSelected())
                                 account = new Account_level_foreign(account);
                             obj.add_account(account);
@@ -563,22 +569,35 @@ public class Controller implements Initializable, ActionListener {
         }
     }
 
+    class Reminder {
+        private Timer timer;
 
-//    @FXML
-//    public void search() {
-//        try {
-//            if (search_phrase.getText().isEmpty() || search_cpy.isEmpty()) {
-//                throw new Exception();
-//            }
-//
-//            String final_string = search_cpy.replaceAll(search_phrase.getText(), " [MATCH]" + search_phrase.getText() + "[MATCH] ");
-//            System.out.println(final_string);
-//        } catch (Exception e) {
-//            System.out.println("Pole 'Szukana fraza' jest puste, bądź nie wczytano archiwum - kod błędu:" + e);
-//        }
-//    }
+        Reminder(int seconds) {
+            timer = new Timer();
+            timer.schedule(new RemindTask(), seconds * 1000);
+        }
 
+        class RemindTask extends TimerTask {
+            public void run() {
+                System.out.println("Nowy rok");
+                timer.cancel();
+                rise();
+                new Reminder(time);
+            }
+        }
 
+        private void rise() {
+            for (Bank bank : card_service_center.bank_list)
+                for (Account acc : bank.list_of_acc_in_bank)
+                    if (acc instanceof Account_level_golden || ((Account_level_foreign) acc).getAccount() instanceof Account_level_golden) {
+                        Double val=1+((Account_level_golden)acc).getInterest_rate()/100;
+//                        System.out.println(val);
+                        Double temp=acc.getBalance()*val;
+//                        System.out.println(acc.getBalance());
+                        acc.setBalance(temp.intValue());
+                    }
+        }
+    }
 }
 
 

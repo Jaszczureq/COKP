@@ -2,6 +2,8 @@ package sample;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public interface Account {
     String decorate();
@@ -33,7 +35,7 @@ class AccountImpl implements Account {
     private AccountState state = null;
     private String owner_name;
     private String owner_surname;
-    private int balance = 0;
+    private int balance = 1000;
     //    private float interest_rate;                                    //
     public long acc_number;
     public List<Card> card_assigned_to_account = new ArrayList<Card>();
@@ -153,7 +155,7 @@ class AccountImpl implements Account {
                 ", acc_number=" + acc_number +
                 ", acc_balance=" + balance +
                 ", card_assigned_to_account=\n\t\t" + card_assigned_to_account +
-                "}";
+                "}\n";
     }
 }
 
@@ -173,6 +175,8 @@ abstract class Account_level implements Account {
 
         return null;
     }
+
+    //region Overrides
     @Override
     public void setBalance(int balance) {
         account.setBalance(balance);
@@ -222,6 +226,7 @@ abstract class Account_level implements Account {
     public void setState(AccountState state) {
         account.setState(state);
     }
+    //endregion
 }
 
 class Account_level_golden extends Account_level {
@@ -259,16 +264,9 @@ class Account_level_foreign extends Account_level {
 //        this.currency = cur;
     }
 
-//    public String getCurrency() {
-//        return currency;
-//    }
-//
-//    public void setCurrency(String currency) {
-//        this.currency = currency;
-//    }
-
     @Override
     public String toString() {
         return "Foreign Account{" + super.account.toString();
     }
+
 }
