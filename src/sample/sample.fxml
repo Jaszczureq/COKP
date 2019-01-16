@@ -138,13 +138,13 @@
                     <children>
                         <TextField fx:id="query_firm_name" layoutX="14.0" layoutY="14.0" promptText="Nazwa firmy"/>
                         <TextField fx:id="query_card_number" layoutX="14.0" layoutY="48.0" promptText="Numer karty"/>
+                        <TextField fx:id="query_amount" layoutX="14.0" layoutY="82.0" promptText="Kwota transakcji"/>
                         <TextField fx:id="query_currency" layoutX="14.0" layoutY="114.0" promptText="Waluta"/>
                         <Button layoutX="174.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_query"
                                 prefHeight="25.0" prefWidth="126.0" text="Wyślij zapytanie"/>
                         <Button layoutX="174.0" layoutY="48.0" mnemonicParsing="false" onAction="#get_queries"
                                 prefHeight="25.0" prefWidth="126.0" text="Pokaż zapytania"/>
-                        <TextField fx:id="query_amount" layoutX="14.0" layoutY="82.0" promptText="Kwota transakcji"/>
-                    </children>
+                        </children>
                 </AnchorPane>
             </content>
         </Tab>

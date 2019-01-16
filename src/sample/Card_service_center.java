@@ -60,8 +60,8 @@ public class Card_service_center{
                 System.out.println("Pomyślnie usunięto bank");
                 return;
             }
-            System.out.println("Brak podanego banku w bazie");
         }
+        System.out.println("Brak podanego banku w bazie");
 
     }
 

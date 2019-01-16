@@ -12,12 +12,12 @@ class AccountOpen implements AccountState {
 
 class AccountClosed implements AccountState {
     public void credit(Account acc, int amount) {
-        System.out.println("The account is closed!");
+        System.out.println("Konto jest zamknięte");
     }
 }
 
 class AccountSuspended implements AccountState {
     public void credit(Account acc, int amount) {
-        System.out.println("The account is suspended!");
+        System.out.println("Konto jest zawieszone");
     }
 }

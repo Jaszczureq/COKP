@@ -4,9 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,7 +16,26 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Controller implements Initializable, ActionListener {
+
+    @FXML
+    private TabPane tabPane;
+
+    SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String action=e.getActionCommand();
+        if(action.equals("Switch")){
+            selectTab();
+        }
+    }
+
+    private void selectTab() {
+        selectionModel.getSelectedIndex();
+
+        selectionModel.selectNext();
+    }
 
     @FXML
     private TextField card_owner_name_fieldtext;
@@ -299,10 +319,16 @@ public class Controller implements Initializable {
             System.out.println("Uzupełnij wszystkie pola!");
             return;
         }
-        Client client = new Client(client_name.getText(), client_surname.getText());
 
         for (Bank obj : card_service_center.bank_list) {
             if (obj.bank_name.equals(client_assigned_to_bank.getText())) {
+                for (Client temp : obj.list_of_clients) {
+                    if (temp.getName().equals(client_name.getText()) && temp.getSurname().equals(client_surname.getText())) {
+                        System.out.println("W tym banku istnieje klient o podanych danych osobowych");
+                        return;
+                    }
+                }
+                Client client = new Client(client_name.getText(), client_surname.getText());
                 obj.add_client(client);
                 System.out.println("Dodano klienta");
                 return;
@@ -324,10 +350,10 @@ public class Controller implements Initializable {
                 for (Account acc : obj.list_of_acc_in_bank) {
                     if (acc.getAcc_number() == Integer.parseInt(account_number.getText())) {
                         System.out.println("Updating account");
-                        Account temp=acc;
-                        do {
+                        Account temp = acc;
+                        while (temp instanceof Account_level_golden || temp instanceof Account_level_foreign) {
                             temp = ((Account_level) temp).getAccount();
-                        }while(temp instanceof Account_level_golden || temp instanceof Account_level_foreign);
+                        }
                         if (golden.isSelected())
                             temp = new Account_level_golden(temp, 2.5);
                         if (foreign.isSelected())
@@ -340,15 +366,20 @@ public class Controller implements Initializable {
             }
             for (Bank obj : card_service_center.bank_list) {
                 if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
-                    System.out.println("Creating account");
-                    Account account = new AccountImpl(account_owner_name.getText(), account_owner_surname.getText(), Integer.parseInt(account_number.getText()));
-                    if (golden.isSelected())
-                        account = new Account_level_golden(account, 2.5);
-                    if (foreign.isSelected())
-                        account = new Account_level_foreign(account);
-                    obj.add_account(account);
-                    System.out.println("Dodano konto");
-                    return;
+//                    System.out.println("Creating account");
+                    for (Client temp : obj.list_of_clients) {
+                        if (temp.getName().equals(account_owner_name.getText()) && temp.getSurname().equals(account_owner_surname.getText())) {
+
+                            Account account = new AccountImpl(temp.getName(), temp.getSurname(), Integer.parseInt(account_number.getText()));
+                            if (golden.isSelected())
+                                account = new Account_level_golden(account, 2.5);
+                            if (foreign.isSelected())
+                                account = new Account_level_foreign(account);
+                            obj.add_account(account);
+                            System.out.println("Dodano konto");
+                            return;
+                        }
+                    }
                 }
             }
             System.out.println("Brak klienta o podanych danych");
@@ -440,8 +471,8 @@ public class Controller implements Initializable {
 
             Long.parseLong(query_card_number.getText());
             Float.parseFloat(query_amount.getText());
-            long card_number_meth = Long.parseLong(query_card_number.getText());
-            float query_amount_meth = Float.parseFloat(query_amount.getText());
+            long card_number_method = Long.parseLong(query_card_number.getText());
+            float query_amount_method = Float.parseFloat(query_amount.getText());
 
             for (Firm firm_clone : card_service_center.firm_list) {
                 if (!firm_clone.getName_of_firm().equals(Firm_name.getText())) {
@@ -453,16 +484,20 @@ public class Controller implements Initializable {
             for (Bank bank : card_service_center.bank_list) {
                 for (Account account : bank.list_of_acc_in_bank) {
                     for (Card card : account.getCard_assigned_to_account()) {
-                        if (card.getCard_number() == card_number_meth) {
+                        if (card.getCard_number() == card_number_method) {
                             boolean decision = Math.random() < 0.8;
                             if (decision) {
-                                if (account instanceof Account_level_foreign == false && !query_currency.getText().toLowerCase().equals("pln")) {
+                                if (!(account instanceof Account_level_foreign) && !query_currency.getText().toLowerCase().equals("pln")) {
                                     System.out.println("Podane konto nie jest kontem zagranicznym");
                                     return;
                                 }
-                                Query query = new Query(card, query_currency.getText(), query_firm_name.getText(), query_amount_meth);
-                                card_service_center.add_query(query);
-                                System.out.println("Transakcja zaakceptowana");
+                                if (account.getState() instanceof AccountOpen) {
+                                    Query query = new Query(card, query_currency.getText(), query_firm_name.getText(), query_amount_method);
+                                    card_service_center.add_query(query);
+                                    System.out.println("Transakcja zaakceptowana");
+                                } else {
+                                    account.credit(1);
+                                }
                             } else {
                                 System.out.println("Transakcja odrzucona");
                             }
@@ -494,7 +529,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void save_to_file() throws IOException {
+    public void save_to_file() {
         try {
 
             File file = new File(archive_save_file.getText());
@@ -517,7 +552,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void archive_read_from_file() throws IOException {
+    public void archive_read_from_file() {
         try {
             for (String s : new FileLineIterable(archive_open_file.getText()))
                 System.out.println(s);
@@ -526,19 +561,20 @@ public class Controller implements Initializable {
         }
     }
 
-    @FXML
-    public void search() {
-        try {
-            if (search_phrase.getText().isEmpty() || search_cpy.isEmpty()) {
-                throw new Exception();
-            }
 
-            String final_string = search_cpy.replaceAll(search_phrase.getText(), " [MATCH]" + search_phrase.getText() + "[MATCH] ");
-            System.out.println(final_string);
-        } catch (Exception e) {
-            System.out.println("Pole 'Szukana fraza' jest puste, bądź nie wczytano archiwum - kod błędu:" + e);
-        }
-    }
+//    @FXML
+//    public void search() {
+//        try {
+//            if (search_phrase.getText().isEmpty() || search_cpy.isEmpty()) {
+//                throw new Exception();
+//            }
+//
+//            String final_string = search_cpy.replaceAll(search_phrase.getText(), " [MATCH]" + search_phrase.getText() + "[MATCH] ");
+//            System.out.println(final_string);
+//        } catch (Exception e) {
+//            System.out.println("Pole 'Szukana fraza' jest puste, bądź nie wczytano archiwum - kod błędu:" + e);
+//        }
+//    }
 
 
 }
