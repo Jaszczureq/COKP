@@ -38,11 +38,15 @@ public class Main extends Application implements EventHandler<ActionEvent>, Acti
                     }
             }
         });
+
+        Button button=new Button("Mnem");
+
         JButton bt=new JButton("Mnemonic");
         bt.setActionCommand("Switch");
         KeyCodeCombination left=new KeyCodeCombination(KeyCode.LEFT, KeyCodeCombination.ALT_DOWN);
         KeyCodeCombination right=new KeyCodeCombination(KeyCode.RIGHT, KeyCodeCombination.ALT_DOWN);
-//        bt.setMnemonic(new KeyStroke(KeyCode.LEFT, KeyCodeCombination.ALT_DOWN));
+        bt.setMnemonic(java.awt.event.KeyEvent.VK_ALT);
+
 //        primaryStage.getScene().addMnemonic(new Mnemonic(((Node)bt), left));
         primaryStage.show();
 

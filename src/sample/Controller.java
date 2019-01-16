@@ -18,11 +18,6 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable, ActionListener {
 
-    @FXML
-    private TabPane tabPane;
-
-    SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-
     @Override
     public void actionPerformed(ActionEvent e) {
         String action=e.getActionCommand();
@@ -30,8 +25,8 @@ public class Controller implements Initializable, ActionListener {
             selectTab();
         }
     }
-
-    private void selectTab() {
+    @FXML
+    public void selectTab() {
         selectionModel.getSelectedIndex();
 
         selectionModel.selectNext();
@@ -103,6 +98,11 @@ public class Controller implements Initializable, ActionListener {
     @FXML
     private TextField obs_bank_name;
 
+    @FXML
+    private TabPane tabPane;
+
+    SingleSelectionModel<Tab> selectionModel;
+
     Card_service_center card_service_center = new Card_service_center();
 
     @Override
@@ -113,6 +113,8 @@ public class Controller implements Initializable, ActionListener {
         for (Bank bank : card_service_center.bank_list)
             options.add(bank.bank_name);
         prepareStuff();
+        selectionModel = tabPane.getSelectionModel();
+
     }
 
     private void prepareStuff() {

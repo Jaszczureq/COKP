@@ -25,7 +25,7 @@
                                    prefWidth="203.0" promptText="Numer karty"/>
                         <TextField fx:id="card_bank_assigned_fieldtext" layoutX="14.0" layoutY="105.0" prefHeight="25.0"
                                    prefWidth="200.0" promptText="Bank wydawca"/>
-                        <Button layoutX="225.0" layoutY="75.0" mnemonicParsing="false" onAction="#add_card_prompt"
+                        <Button layoutX="225.0" layoutY="75.0" mnemonicParsing="false" onAction="#selectTab"
                                 prefHeight="0.0" prefWidth="107.0" text="Dodaj kartę"/>
                         <CheckBox fx:id="is_debit" layoutX="226.0" layoutY="19.0" mnemonicParsing="false"
                                   text="Debetowa"/>
