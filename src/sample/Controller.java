@@ -1,20 +1,26 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
 public class Controller implements Initializable, ActionListener {
 
     private int time = 600;
+
+    @FXML
+    TextArea textArea;
+
+    public void appendText(final String valueOf) {
+        Platform.runLater(() -> textArea.appendText(valueOf));
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -31,6 +37,8 @@ public class Controller implements Initializable, ActionListener {
     }
 
     //region controls
+    @FXML
+    Button clear_button;
     @FXML
     private TextField card_owner_name_fieldtext;
     @FXML
@@ -102,6 +110,14 @@ public class Controller implements Initializable, ActionListener {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        OutputStream out = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                appendText(String.valueOf((char) b));
+            }
+        };
+        System.setOut(new PrintStream(out, true));
+        System.setErr(new PrintStream(out, true));
         prepareStuff();
         selectionModel = tabPane.getSelectionModel();
     }
@@ -141,6 +157,11 @@ public class Controller implements Initializable, ActionListener {
             }
         }
         return null;
+    }
+
+    @FXML
+    public void clear_textArea() {
+        textArea.clear();
     }
 
     @FXML
@@ -338,11 +359,11 @@ public class Controller implements Initializable, ActionListener {
                     if (acc.getAcc_number() == Integer.parseInt(account_number.getText())) {
 //                        System.out.println("Updating account");
                         Account temp = acc;
-                        try {
-                            temp = ((Account_level) temp).removeDecorators();
-                        } catch (ClassCastException e) {
-                            temp = acc;
-                        }
+//                        try {
+                        temp = ((Account_level) temp).removeDecorators();
+//                        } catch (ClassCastException e) {
+//                            temp = acc;
+//                        }
                         System.out.println(temp.toString());
 //                        }
                         if (foreign.isSelected()) {

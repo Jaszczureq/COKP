@@ -41,6 +41,8 @@ public interface Account {
     boolean pay_off_credit(int amount);
 
     Query doQuery(Card card, String curr, String firmName, float ammount);
+
+    Account removeDecorators();
 }
 
 class AccountImpl implements Account {
@@ -90,6 +92,11 @@ class AccountImpl implements Account {
             return null;
         }
         return getState().doQuery(card, curr, firmName, amount);
+    }
+
+    @Override
+    public Account removeDecorators() {
+        return this;
     }
 
     public void credit(int amount) {
@@ -318,11 +325,12 @@ abstract class Account_level implements Account {
         return 0.0;
     }
 
-    Account removeDecorators() {
-        if (getDecorators_count() == 2)
-            return ((Account_level) account).getAccount();
-        setDecorators_count(0);
+    public Account removeDecorators() {
         return account;
+//        if (getDecorators_count() == 2)
+//            return ((Account_level) account).getAccount();
+//        setDecorators_count(0);
+//        return account;
     }
 }
 
@@ -357,6 +365,10 @@ class Account_level_golden extends Account_level {
     public String toString() {
         return "Golden Account{" + super.account.toString();
     }
+
+    public Account removeDecorators() {
+        return super.account.removeDecorators();
+    }
 }
 
 class Account_level_foreign extends Account_level {
@@ -384,4 +396,7 @@ class Account_level_foreign extends Account_level {
         return "Foreign Account{" + super.account.toString();
     }
 
+    public Account removeDecorators() {
+        return super.account.removeDecorators();
+    }
 }

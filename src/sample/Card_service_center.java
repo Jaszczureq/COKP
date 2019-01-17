@@ -9,6 +9,7 @@ public class Card_service_center{
     List<Bank>bank_list = new ArrayList<Bank>();
     List<Query>query_list=new ArrayList<Query>();
     List<Firm>firm_list=new ArrayList<Firm>();
+    Iterator<Bank>iterator;
     private boolean authorisation;
 
     List<Bank> getBank_list() {

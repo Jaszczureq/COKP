@@ -37,6 +37,7 @@ class Media implements Observer, Notifications {
         System.out.println("Nastąpiła aktualizacja danych w Media.");
         System.out.println("Nazwa banku: " + bank.getBank_name());
         System.out.println("Aktualny stan: " + bank.getCurrent_balance());
+        // TODO fix security levels
         System.out.println("Poziom bezpieczeństwa: " + (bank.getSecurity_level() + 1));
     }
 
