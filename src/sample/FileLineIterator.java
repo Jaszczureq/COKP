@@ -9,89 +9,74 @@ import java.util.NoSuchElementException;
 
 
 public class FileLineIterator
-        implements Iterator<String>
-{
-    private FileReader      reader;
-    private BufferedReader  in = null;
-    private String          string = null;
+        implements Iterator<String> {
+    private FileReader reader;
+    private BufferedReader buff_in = null;
+    private String string = null;
 
-    public FileLineIterator( File file )
-            throws IOException
-    {
-        try
-        {
-            reader      = new FileReader( file );
-            in          = new BufferedReader( reader );
-            string      = in.readLine();
-            if( string == null )
-            {
-                in.close();
-                in = null;
+    public FileLineIterator(File file)
+            throws IOException {
+        try {
+            reader = new FileReader(file);
+            buff_in = new BufferedReader(reader);
+            string = buff_in.readLine();
+            if (string == null) {
+                buff_in.close();
+                buff_in = null;
             }
-        }
-        catch( IOException ex )
-        {
+        } catch (IOException ex) {
             string = null;
-            if( in != null ) try{ in.close(); } catch( IOException ex2 ) { }
-            in = null;
+            if (buff_in != null) try {
+                buff_in.close();
+            } catch (IOException ex2) {
+            }
+            buff_in = null;
             throw ex;
         }
     }
 
     @Override
-    public boolean hasNext()
-    {
+    public boolean hasNext() {
         return string != null;
     }
 
     @Override
     public String next()
-            throws NoSuchElementException
-    {
-        String      returnString = string;
-        try
-        {
-            if( string == null )
-            {
-                throw new NoSuchElementException( "Next line is not available" );
-            }
-            else
-            {
-                string = in.readLine();
-                if( string == null && in != null )
-                {
-                    in.close();
-                    in = null;
+            throws NoSuchElementException {
+        String returnString = string;
+        try {
+            if (string == null) {
+                throw new NoSuchElementException("Brakuje następnej linii");
+            } else {
+                string = buff_in.readLine();
+                if (string == null && buff_in != null) {
+                    buff_in.close();
+                    buff_in = null;
                 }
             }
-        }
-        catch( Exception ex )
-        {
-            throw new NoSuchElementException( "Exception caught in FileLineIterator.next() " + ex );
+        } catch (Exception ex) {
+            throw new NoSuchElementException("Wyjątek w buff_in FileLineIterator.next() " + ex);
         }
         return returnString;
     }
 
     @Override
-    public void remove()
-    {
-        throw new UnsupportedOperationException( "FileLineIterator.remove() is not supported" );
+    public void remove() {
+        throw new UnsupportedOperationException("FileLineIterator.remove() nie jest obsługiwane");
     }
 
     @Override
     protected void finalize()
-            throws Throwable
-    {
-        try
-        {
+            throws Throwable {
+        try {
             string = null;
-            if( in != null )
-                try{ in.close(); }
-            catch( Exception ex ) { }
-            in = null;
-        }
-        finally
-        {
+            if (buff_in != null)
+                try {
+                    buff_in.close();
+                } catch (Exception ex) {
+                }
+            buff_in = null;
+        } finally {
             super.finalize();
         }
     }

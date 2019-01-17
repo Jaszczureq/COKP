@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Controller implements Initializable, ActionListener {
 
-    int time=15;
+    int time = 600;
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -120,17 +120,19 @@ public class Controller implements Initializable, ActionListener {
 
     private void prepareStuff() {
         String bank_name = "TestBank", name = "Imie", surname = "Nazwisko";
-        int capital = 15000, acc_number = 12349876, credit_amount = 1000, card_number = 15263748;
+        int capital = 600000, acc_number = 12349876, card_number = 15263748;
         Bank bank = new Bank(bank_name, capital);
         card_service_center.add_bank(bank);
         Client client = new Client(name, surname);
         bank.add_client(client);
-        Account account = new Account_level_golden(new AccountImpl(name, surname, acc_number), 10.0);
+        Account account = new Account_level_golden(new Account_level_foreign(new AccountImpl(name, surname, acc_number)), 10.0);
+//        Account account = new Account_level_foreign(new Account_level_golden(new AccountImpl(name, surname, acc_number), 10.0));
         bank.add_account(account);
         Card card = new Debit(card_number, name, surname, bank.getBank_name());
         account.add_card(card);
 
-        account.credit(credit_amount);
+//        account.someMethod();
+//        account.credit(credit_amount);
         new Reminder(time);
     }
 
@@ -171,24 +173,21 @@ public class Controller implements Initializable, ActionListener {
             if (obj.bank_name.equals(card_bank_assigned_fieldtext.getText())) {
                 for (Account acc : obj.list_of_acc_in_bank) {
                     if (acc.getOwner_name().equals(card_owner_name_fieldtext.getText()) && acc.getOwner_surname().equals(card_owner_surname_fieldtext.getText())) {
-                        if (acc.getState() instanceof AccountClosed || acc.getState() instanceof AccountSuspended) {
-                            acc.getState().credit(acc, 1);
+                        Card new_card = acc.getState().add_card(
+                                Long.parseLong(card_number_fieldtext.getText()),
+                                card_owner_name_fieldtext.getText(),
+                                card_owner_surname_fieldtext.getText(),
+                                card_bank_assigned_fieldtext.getText());
+                        if (new_card == null) {
                             return;
+                        } else if (is_credit.isSelected() && !is_debit.isSelected()) {
+                            new_card = new Credit(new_card);
+                        } else {
+                            new_card = new Debit(new_card);
                         }
-                        if (is_credit.isSelected() && !is_debit.isSelected()) {
-                            Credit new_card = new Credit(Long.parseLong(card_number_fieldtext.getText()), card_owner_name_fieldtext.getText(),
-                                    card_owner_surname_fieldtext.getText(), card_bank_assigned_fieldtext.getText());
-                            acc.add_card(new_card);
-                            System.out.println("Dodano kartę");
-                            return;
-                        }
-                        if (is_debit.isSelected() && !is_credit.isSelected()) {
-                            Debit new_card = new Debit(Long.parseLong(card_number_fieldtext.getText()), card_owner_name_fieldtext.getText(),
-                                    card_owner_surname_fieldtext.getText(), card_bank_assigned_fieldtext.getText());
-                            acc.add_card(new_card);
-                            System.out.println("Dodano kartę");
-                            return;
-                        }
+                        acc.add_card(new_card);
+                        System.out.println("Dodano kartę");
+                        return;
                     }
                 }
             }
@@ -352,15 +351,25 @@ public class Controller implements Initializable, ActionListener {
             for (Bank obj : card_service_center.bank_list) {
                 for (Account acc : obj.list_of_acc_in_bank) {
                     if (acc.getAcc_number() == Integer.parseInt(account_number.getText())) {
-                        System.out.println("Updating account");
+//                        System.out.println("Updating account");
                         Account temp = acc;
-                        while (temp instanceof Account_level_golden || temp instanceof Account_level_foreign) {
-                            temp = ((Account_level) temp).getAccount();
+                        try {
+                            temp = ((Account_level) temp).removeDecorators();
+                        } catch (ClassCastException e) {
+                            temp = acc;
                         }
-                        if (golden.isSelected())
-                            temp = new Account_level_golden(temp, 2.5);
-                        if (foreign.isSelected())
+                        System.out.println(temp.toString());
+//                        }
+                        if (foreign.isSelected()) {
                             temp = new Account_level_foreign(temp);
+                        }
+                        if (golden.isSelected()) {
+                            if (account_interest_rate.getText().isEmpty()) {
+                                System.out.println("Uzupełnij wszystkie pola!");
+                                return;
+                            }
+                            temp = new Account_level_golden(temp, Double.parseDouble(account_interest_rate.getText()));
+                        }
                         obj.delete_account(acc);
                         obj.add_account(temp);
                         return;
@@ -369,11 +378,13 @@ public class Controller implements Initializable, ActionListener {
             }
             for (Bank obj : card_service_center.bank_list) {
                 if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
-//                    System.out.println("Creating account");
+                    System.out.println("Creating account");
                     for (Client temp : obj.list_of_clients) {
                         if (temp.getName().equals(account_owner_name.getText()) && temp.getSurname().equals(account_owner_surname.getText())) {
-
                             Account account = new AccountImpl(temp.getName(), temp.getSurname(), Integer.parseInt(account_number.getText()));
+
+                            if (foreign.isSelected())
+                                account = new Account_level_foreign(account);
                             if (golden.isSelected()) {
                                 if (account_interest_rate.getText().isEmpty()) {
                                     System.out.println("Uzupełnij wszystkie pola!");
@@ -381,8 +392,6 @@ public class Controller implements Initializable, ActionListener {
                                 }
                                 account = new Account_level_golden(account, Double.parseDouble(account_interest_rate.getText()));
                             }
-                            if (foreign.isSelected())
-                                account = new Account_level_foreign(account);
                             obj.add_account(account);
                             System.out.println("Dodano konto");
                             return;
@@ -401,17 +410,52 @@ public class Controller implements Initializable, ActionListener {
     @FXML
     public void take_credit() {
         if (credit_amount.getText().isEmpty()) {
-            System.out.println("Uzupełnij wszystkie pola!:credit");
+            System.out.println("Uzupełnij wszystkie pola!");
             return;
         }
         Account acc = find_account();
         if (acc == null) {
-            System.out.println("Nie ma takiego konta z banku");
+            System.out.println("Nie ma takiego konta w banku");
             return;
         }
         int amount = Integer.parseInt(credit_amount.getText());
 
-        acc.credit(amount);
+        for (Bank bank : card_service_center.bank_list) {
+            for (Account temp : bank.list_of_acc_in_bank) {
+                if (acc.equals(temp)) {
+                    acc.credit(amount);
+                    bank.balanceChanged(bank.getCurrent_balance() - amount);
+                }
+            }
+        }
+    }
+
+    @FXML
+    public void pay_off_credit() {
+        if (credit_amount.getText().isEmpty()) {
+            System.out.println("Uzupełnij wszystkie pola!");
+            return;
+        }
+        Account acc = find_account();
+        if (acc == null) {
+            System.out.println("Nie ma takiego konta w banku");
+            return;
+        }
+        int amount = Integer.parseInt(credit_amount.getText());
+
+        for (Bank bank : card_service_center.bank_list) {
+            for (Account temp : bank.list_of_acc_in_bank) {
+                if (acc.equals(temp)) {
+                    int var = acc.getCredit_amount();
+                    if (acc.pay_off_credit(amount))
+                        if (amount > var)
+                            bank.balanceChanged(bank.getCurrent_balance() + var);
+                        else
+                            bank.balanceChanged(bank.getCurrent_balance() + amount);
+
+                }
+            }
+        }
     }
 
     @FXML
@@ -494,17 +538,16 @@ public class Controller implements Initializable, ActionListener {
                     for (Card card : account.getCard_assigned_to_account()) {
                         if (card.getCard_number() == card_number_method) {
                             boolean decision = Math.random() < 0.8;
-                            if (decision) {
-                                if (!(account instanceof Account_level_foreign) && !query_currency.getText().toLowerCase().equals("pln")) {
-                                    System.out.println("Podane konto nie jest kontem zagranicznym");
-                                    return;
-                                }
-                                if (account.getState() instanceof AccountOpen) {
-                                    Query query = new Query(card, query_currency.getText(), query_firm_name.getText(), query_amount_method);
+                            if (true) {
+                                try {
+                                    Query query = account.doQuery(card, query_currency.getText(),
+                                            query_firm_name.getText(), query_amount_method);
+                                    if (query == null)
+                                        return;
                                     card_service_center.add_query(query);
                                     System.out.println("Transakcja zaakceptowana");
-                                } else {
-                                    account.credit(1);
+                                } catch (ClassCastException e) {
+                                    System.out.println("Brak konta foreign" + e.getMessage());
                                 }
                             } else {
                                 System.out.println("Transakcja odrzucona");
@@ -530,7 +573,11 @@ public class Controller implements Initializable, ActionListener {
             if (card_service_center.query_list.isEmpty()) {
                 throw new NullPointerException();
             }
-            System.out.println(card_service_center.getQuery_list());
+            System.out.println('[');
+            for (Query q : card_service_center.getQuery_list()) {
+                System.out.println(q.toString() + ", ");
+            }
+            System.out.println(']');
         } catch (NullPointerException e) {
             System.out.println("Lista zapytań jest pusta - kod błędu: " + e);
         }
@@ -588,14 +635,15 @@ public class Controller implements Initializable, ActionListener {
 
         private void rise() {
             for (Bank bank : card_service_center.bank_list)
-                for (Account acc : bank.list_of_acc_in_bank)
-                    if (acc instanceof Account_level_golden || ((Account_level_foreign) acc).getAccount() instanceof Account_level_golden) {
-                        Double val=1+((Account_level_golden)acc).getInterest_rate()/100;
-//                        System.out.println(val);
-                        Double temp=acc.getBalance()*val;
-//                        System.out.println(acc.getBalance());
+                for (Account acc : bank.list_of_acc_in_bank) {
+                    try {
+                        Double val = 1 + acc.getInterest_rate() / 100;
+                        Double temp = acc.getBalance() * val;
                         acc.setBalance(temp.intValue());
+                    } catch (ClassCastException e) {
+                        System.out.println("Brak konta golden");
                     }
+                }
         }
     }
 }

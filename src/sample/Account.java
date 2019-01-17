@@ -2,8 +2,6 @@ package sample;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public interface Account {
     String decorate();
@@ -27,15 +25,32 @@ public interface Account {
     void credit(int amount);
 
     void setState(AccountState state);
+
+    int getDecorators_count();
+
+    void setDecorators_count(int decorators_count);
+
+    int getCredit_amount();
+
+    void setCredit_amount(int credit_amount);
+
+    void someMethod();
+
+    double getInterest_rate();
+
+    boolean pay_off_credit(int amount);
+
+    Query doQuery(Card card, String curr, String firmName, float ammount);
 }
 
 class AccountImpl implements Account {
 
-
+    public int decorators_count = 0;
     private AccountState state = null;
     private String owner_name;
     private String owner_surname;
     private int balance = 1000;
+    private int credit_amount = 0;
     //    private float interest_rate;                                    //
     public long acc_number;
     public List<Card> card_assigned_to_account = new ArrayList<Card>();
@@ -45,6 +60,38 @@ class AccountImpl implements Account {
         this.owner_surname = owner_surname;
         this.acc_number = acc_number;
         this.state = new AccountOpen();
+    }
+
+    public boolean pay_off_credit(int amount) {
+        return state.pay_off_credit(this, amount);
+    }
+
+    public int getCredit_amount() {
+        return credit_amount;
+    }
+
+    public void setCredit_amount(int credit_amount) {
+        this.credit_amount = credit_amount;
+    }
+
+    @Override
+    public void someMethod() {
+        return;
+    }
+
+    @Override
+    public double getInterest_rate() {
+        return 0.0;
+    }
+
+    @Override
+    public Query doQuery(Card card, String curr, String firmName, float amount) {
+        System.out.println("AccountImpl");
+        if (!"pln".equals(curr.toLowerCase())) {
+            System.out.println("Brak konta Foreign");
+            return null;
+        }
+        return getState().doQuery(card, curr, firmName, amount);
     }
 
     public void credit(int amount) {
@@ -145,6 +192,13 @@ class AccountImpl implements Account {
         return card_assigned_to_account.contains(card);
     }
 
+    public int getDecorators_count() {
+        return decorators_count;
+    }
+
+    public void setDecorators_count(int decorators_count) {
+        this.decorators_count = decorators_count;
+    }
     //endregion
 
     @Override
@@ -172,11 +226,23 @@ abstract class Account_level implements Account {
 
     @Override
     public String decorate() {
-
         return null;
     }
 
     //region Overrides
+    public int getCredit_amount() {
+        return account.getCredit_amount();
+    }
+
+    public void setCredit_amount(int credit_amount) {
+        account.setCredit_amount(credit_amount);
+    }
+
+    @Override
+    public boolean pay_off_credit(int amount) {
+        return account.pay_off_credit(amount);
+    }
+
     @Override
     public void setBalance(int balance) {
         account.setBalance(balance);
@@ -226,7 +292,41 @@ abstract class Account_level implements Account {
     public void setState(AccountState state) {
         account.setState(state);
     }
+
+    @Override
+    public int getDecorators_count() {
+        return account.getDecorators_count();
+    }
+
+    @Override
+    public void setDecorators_count(int decorators_count) {
+        account.setDecorators_count(decorators_count);
+    }
+
     //endregion
+
+
+    @Override
+    public Query doQuery(Card card, String curr, String firmName, float amount) {
+        System.out.println("Account_level");
+
+        if (!"pln".equals(curr.toLowerCase())) {
+            System.out.println("Brak konta Foreign");
+            return null;
+        }
+        return getState().doQuery(card, curr, firmName, amount);
+    }
+
+    public double getInterest_rate() {
+        return 0.0;
+    }
+
+    public Account removeDecorators() {
+        if (getDecorators_count() == 2)
+            return ((Account_level) account).getAccount();
+        setDecorators_count(0);
+        return account;
+    }
 }
 
 class Account_level_golden extends Account_level {
@@ -235,19 +335,25 @@ class Account_level_golden extends Account_level {
     public Account_level_golden(Account acc, double ir) {
         super(acc);
         this.interest_rate = ir;
+        setDecorators_count(getDecorators_count() + 1);
     }
 
     public double getInterest_rate() {
-        return interest_rate;
-    }
-
-    public void setInterest_rate(double interest_rate) {
-        this.interest_rate = interest_rate;
+        return interest_rate + super.account.getInterest_rate();
     }
 
     @Override
-    public String decorate() {
-        return super.decorate();
+    public Query doQuery(Card card, String curr, String firmName, float ammount) {
+        return super.account.doQuery(card, curr, firmName, ammount);
+    }
+
+    public void setInterest_rate(double interest_rate) {
+//        this.interest_rate = interest_rate;
+    }
+
+    @Override
+    public void someMethod() {
+        System.out.println("Golden Account");
     }
 
     @Override
@@ -257,11 +363,23 @@ class Account_level_golden extends Account_level {
 }
 
 class Account_level_foreign extends Account_level {
-//    private String currency;
 
     public Account_level_foreign(Account acc) {
         super(acc);
-//        this.currency = cur;
+        setDecorators_count(getDecorators_count() + 1);
+    }
+
+    @Override
+    public void someMethod() {
+        System.out.println("Foreign Account");
+    }
+
+    public Query doQuery(Card card, String curr, String firmName, float ammount) {
+        return account.getState().doQuery(card, curr, firmName, ammount);
+    }
+
+    public double getInterest_rate() {
+        return 0 + super.account.getInterest_rate();
     }
 
     @Override

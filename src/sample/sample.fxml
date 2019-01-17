@@ -3,11 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-
-
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         prefHeight="302.0" prefWidth="382.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121"
-         xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+         prefHeight="302.0" prefWidth="382.0" tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <tabs>
         <Tab text="Karta">
             <content>
@@ -28,8 +26,8 @@
                                   text="Debetowa"/>
                         <CheckBox fx:id="is_credit" layoutX="226.0" layoutY="37.0" mnemonicParsing="false"
                                   text="Kredytowa"/>
-                        <Button fx:id="switchTabs" layoutX="0.0" layoutY="0.0" mnemonicParsing="false" onAction="#selectTab"
-                                prefHeight="0.0" prefWidth="0.0" text="" visible="false"/>
+                        <Button fx:id="switchTabs" layoutX="0.0" layoutY="0.0" mnemonicParsing="false"
+                                onAction="#selectTab" prefHeight="0.0" prefWidth="0.0" text="" visible="false"/>
 
                     </children>
                 </AnchorPane>
@@ -39,24 +37,21 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="271.0" prefWidth="382.0">
                     <children>
-                        <TextField fx:id="account_owner_name" layoutX="14.0" layoutY="14.0" prefHeight="25.0"
-                                   prefWidth="171.0" promptText="Imię posiadacza konta"/>
-                        <TextField fx:id="account_owner_surname" layoutX="14.0" layoutY="45.0" prefHeight="25.0"
-                                   prefWidth="171.0" promptText="Nazwisko posiadacza konta"/>
-                        <TextField fx:id="account_number" layoutX="14.0" layoutY="76.0" prefHeight="25.0"
-                                   prefWidth="171.0" promptText="Numer konta"/>
-                        <TextField fx:id="account_assigned_to_bank" layoutX="14.0" layoutY="109.0" prefHeight="25.0"
-                                   prefWidth="171.0" promptText="Bank"/>
-                        <TextField fx:id="account_interest_rate" layoutX="226.0" layoutY="109.0" prefHeight="25.0"
-                                   prefWidth="171.0" promptText="Stopa oprocentowania"/>
+                        <TextField fx:id="account_owner_name" layoutX="14.0" layoutY="14.0"
+                                   promptText="Imię posiadacza konta"/>
+                        <TextField fx:id="account_owner_surname" layoutX="14.0" layoutY="45.0"
+                                   promptText="Nazwisko posiadacza konta"/>
+                        <TextField fx:id="account_number" layoutX="14.0" layoutY="76.0" promptText="Numer konta"/>
+                        <TextField fx:id="account_assigned_to_bank" layoutX="14.0" layoutY="109.0" promptText="Bank"/>
+                        <TextField fx:id="account_interest_rate" layoutX="226.0" layoutY="109.0"
+                                   promptText="Stopa oprocentowania"/>
                         <Button layoutX="211.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_account"
                                 text="Utwórz konto"/>
                         <CheckBox fx:id="golden" layoutX="226.0" layoutY="44.0" mnemonicParsing="false" text="Golden"/>
                         <CheckBox fx:id="foreign" layoutX="226.0" layoutY="62.0" mnemonicParsing="false"
                                   text="Foreign"/>
-                        <TextField fx:id="credit_amount" layoutX="14.0" layoutY="177.0" prefHeight="25.0" prefWidth="166.0"
-                                   promptText="Kwota kredytu"/>
-                        <Button layoutX="211.0" layoutY="177.0" mnemonicParsing="false" onAction="#take_credit"
+                        <TextField fx:id="credit_amount" layoutX="14.0" layoutY="177.0" promptText="Kwota kredytu"/>
+                        <Button layoutX="188.0" layoutY="177.0" mnemonicParsing="false" onAction="#take_credit"
                                 text="Weź kredyt"/>
                         <Button layoutX="14.0" layoutY="217.0" mnemonicParsing="false" onAction="#open_account"
                                 text="Otwórz konto"/>
@@ -64,6 +59,8 @@
                                 text="Zamknij konto"/>
                         <Button layoutX="114.0" layoutY="217.0" mnemonicParsing="false" onAction="#suspend_account"
                                 text="Zawieś konto"/>
+                        <Button layoutX="276.0" layoutY="177.0" mnemonicParsing="false" onAction="#pay_off_credit"
+                                text="Spłać kredyt"/>
                         <!--<ComboBox fx:id="box" layoutX="14.0" layoutY="142.0"/>-->
                     </children>
                 </AnchorPane>
@@ -92,9 +89,9 @@
                         <Button layoutX="217.0" layoutY="21.0" mnemonicParsing="false" onAction="#add_bank_prompt"
                                 text="Dodaj"/>
                         <Button layoutX="217.0" layoutY="58.0" mnemonicParsing="false" onAction="#delete_bank_prompt"
-                                prefHeight="25.0" prefWidth="47.0" text="Usuń"/>
+                                text="Usuń"/>
                         <Button layoutX="43.0" layoutY="95.0" mnemonicParsing="false" onAction="#get_list_of_bank"
-                                prefHeight="25.0" prefWidth="132.0" text="Pokaż listę banków"/>
+                                text="Pokaż listę banków"/>
                     </children>
                 </AnchorPane>
             </content>
@@ -103,7 +100,7 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TextField fx:id="obs_bank_name" layoutX="14.0" layoutY="34.0" promptText="Nazwa Banku" prefWidth="140.0"/>
+                        <TextField fx:id="obs_bank_name" layoutX="14.0" layoutY="34.0" promptText="Nazwa Banku"/>
                         <Text layoutX="187.0" layoutY="39.0" text="Media"/>
                         <Button layoutX="237.0" layoutY="21.0" mnemonicParsing="false" onAction="#add_media"
                                 text="Dodaj"/>
@@ -115,7 +112,7 @@
                         <Button layoutX="297.0" layoutY="58.0" mnemonicParsing="false" onAction="#delete_knf"
                                 text="Usuń"/>
                         <Button layoutX="187.0" layoutY="98.0" mnemonicParsing="false" onAction="#change_kapital"
-                                prefHeight="25.0" prefWidth="132.0" text="Zmień kapitał"/>
+                                text="Zmień kapitał"/>
                     </children>
                 </AnchorPane>
             </content>
@@ -128,7 +125,7 @@
                         <Button layoutX="177.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_firm"
                                 text="Dodaj firmę"/>
                         <Button layoutX="177.0" layoutY="46.0" mnemonicParsing="false" onAction="#delete_firm"
-                                prefHeight="25.0" prefWidth="80.0" text="Usuń firmę"/>
+                                text="Usuń firmę"/>
                     </children>
                 </AnchorPane>
             </content>
@@ -142,10 +139,10 @@
                         <TextField fx:id="query_amount" layoutX="14.0" layoutY="82.0" promptText="Kwota transakcji"/>
                         <TextField fx:id="query_currency" layoutX="14.0" layoutY="114.0" promptText="Waluta"/>
                         <Button layoutX="174.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_query"
-                                prefHeight="25.0" prefWidth="126.0" text="Wyślij zapytanie"/>
+                                text="Wyślij zapytanie"/>
                         <Button layoutX="174.0" layoutY="48.0" mnemonicParsing="false" onAction="#get_queries"
-                                prefHeight="25.0" prefWidth="126.0" text="Pokaż zapytania"/>
-                        </children>
+                                text="Pokaż zapytania"/>
+                    </children>
                 </AnchorPane>
             </content>
         </Tab>
@@ -153,22 +150,22 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="325.0" prefWidth="412.0">
                     <children>
-                        <TextField fx:id="archive_save_file" layoutX="14.0" layoutY="14.0" prefHeight="25.0"
-                                   prefWidth="193.0" promptText="Nazwa pliku do zapisu archiwum"/>
+                        <TextField fx:id="archive_save_file" layoutX="14.0" layoutY="14.0"
+                                   promptText="Nazwa pliku do zapisu archiwum"/>
                         <Button layoutX="230.0" layoutY="14.0" mnemonicParsing="false" onAction="#save_to_file"
-                                prefHeight="25.0" prefWidth="117.0" text="Zapisz archiwum"/>
-                        <TextField fx:id="archive_open_file" layoutX="14.0" layoutY="64.0" prefHeight="25.0"
-                                   prefWidth="193.0" promptText="Nazwa pliku do odczytu archiwum"/>
+                                text="Zapisz archiwum"/>
+                        <TextField fx:id="archive_open_file" layoutX="14.0" layoutY="64.0"
+                                   promptText="Nazwa pliku do odczytu archiwum"/>
                         <Button layoutX="230.0" layoutY="64.0" mnemonicParsing="false"
                                 onAction="#archive_read_from_file" text="Odczytaj archiwum"/>
                         <!--<Text layoutX="5.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0"-->
-                              <!--text="Przeszukiwanie archiwum"/>-->
+                        <!--text="Przeszukiwanie archiwum"/>-->
                         <!--<Text layoutX="20.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0"-->
-                              <!--text="Co chcesz wyszukać"/>-->
+                        <!--text="Co chcesz wyszukać"/>-->
                         <!--<TextField fx:id="search_phrase" layoutX="20.0" layoutY="176.0" prefHeight="25.0"-->
-                                   <!--prefWidth="188.0" promptText="Szukana fraza"/>-->
+                        <!--prefWidth="188.0" promptText="Szukana fraza"/>-->
                         <!--<Button layoutX="230.0" layoutY="176.0" mnemonicParsing="false" onAction="#search"-->
-                                <!--text="Szukaj w archiwum"/>-->
+                        <!--text="Szukaj w archiwum"/>-->
                     </children>
                 </AnchorPane>
             </content>
