@@ -364,7 +364,7 @@ public class Controller implements Initializable, ActionListener {
                     if (acc.getAcc_number() == Integer.parseInt(account_number.getText())) {
                         Account temp = acc;
                         temp = (temp).removeDecorators();
-                        System.out.println(temp.toString());
+                        //System.out.println(temp.toString());
                         if (foreign.isSelected()) {
                             temp = new Account_level_foreign(temp);
                         }
@@ -377,13 +377,14 @@ public class Controller implements Initializable, ActionListener {
                         }
                         obj.delete_account(acc);
                         obj.add_account(temp);
+                        System.out.println("Konto zaktualizowane");
                         return;
                     }
                 }
             }
             for (Bank obj : card_service_center.bank_list) {
                 if (obj.bank_name.equals(account_assigned_to_bank.getText())) {
-                    System.out.println("Creating account");
+//                    System.out.println("Creating account");
                     for (Client temp : obj.list_of_clients) {
                         if (temp.getName().equals(account_owner_name.getText()) && temp.getSurname().equals(account_owner_surname.getText())) {
                             Account account = new AccountImpl(temp.getName(), temp.getSurname(), Integer.parseInt(account_number.getText()));
@@ -432,9 +433,10 @@ public class Controller implements Initializable, ActionListener {
                     return;
                 }
                 if (acc.equals(temp)) {
-                    if (acc.credit(amount))
+                    if (acc.credit(amount)) {
                         bank.balanceChanged(bank.getCurrent_balance() - amount);
-
+                        System.out.println("Konto zasilone kwotą kredytu");
+                    }
                 }
             }
         }
