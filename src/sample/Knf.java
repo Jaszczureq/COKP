@@ -7,7 +7,7 @@ class Knf implements Observer, Notifications {
     private static Knf knf;
 
     private Knf() {
-        banks = new ArrayList<Bank>();
+        banks = new ArrayList<>();
     }
 
     static Knf getInstance() {
@@ -43,7 +43,6 @@ class Knf implements Observer, Notifications {
         }
 
         Bank existingBank = banks.get(index);
-//        existingBank.setCurrent_balance(bank.getCurrent_balance());
         existingBank.setSecurity_level(getSecLevel(stan));
 
         inform(bank);

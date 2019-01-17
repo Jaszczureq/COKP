@@ -1,9 +1,9 @@
 package sample;
 
 interface Observer {
+    void update(Bank bank, int stan);
 
-    /* aktualizuje dane */
-    public void update(Bank bank, int stan);
-    public void addBank(Bank bank);
-    public void removeBank(Bank bank);
+    void addBank(Bank bank);
+
+    void removeBank(Bank bank);
 }

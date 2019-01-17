@@ -8,7 +8,6 @@ public interface AccountState {
     Query doQuery(Card card, String curr, String firmName, float ammount);
 
     boolean pay_off_credit(Account acc, int amount);
-
 }
 
 class AccountOpen implements AccountState {

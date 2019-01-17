@@ -42,7 +42,6 @@ class Media implements Observer, Notifications {
         }
 
         Bank existingBank = banks.get(index);
-//        existingBank.setCurrent_balance(stan);
         existingBank.setSecurity_level(getSecLevel(stan));
 
         inform(bank);
@@ -52,7 +51,6 @@ class Media implements Observer, Notifications {
         System.out.println("Nastąpiła aktualizacja danych w Media.");
         System.out.println("Nazwa banku: " + bank.getBank_name());
         System.out.println("Aktualny stan: " + bank.getCurrent_balance());
-        // TODO fix security levels
         System.out.println("Poziom bezpieczeństwa: " + (bank.getSecurity_level() + 1));
     }
 
@@ -64,33 +62,5 @@ class Media implements Observer, Notifications {
         banks.remove(bank);
     }
 
-//    public static IConnection getConnection(){
-//        return Connection.getInstance();
-//    }
-//
-//    private static class Connection implements IConnection {
-//
-//        private static Media media;
-//
-//        private Connection(Media m) {
-//            media = m;
-//        }
-//
-//        private static Connection media_connection;
-//
-//        public static IConnection getInstance() {
-//            if (media_connection == null) {
-//                synchronized (IConnection.class) {
-//                    if (media_connection == null) {
-//                        Media media = new Media();
-//                        media_connection = new Connection(media);
-//                    }
-//                }
-//            }
-//            return media_connection;
-//
-//        }
-//
-//    }
 
 }

@@ -28,18 +28,6 @@ public class Card {
         return card_number;
     }
 
-//    public void setCard_number(long card_number) {
-//        this.card_number = card_number;
-//    }
-//
-//    public float getBalance() {
-//        return balance;
-//    }
-//
-//    public void setBalance(float balance) {
-//        this.balance = balance;
-//    }
-
     public String getOwner_name() {
         return owner_name;
     }
@@ -55,14 +43,6 @@ public class Card {
     public void setOwner_surname(String owner_surname) {
         this.owner_surname = owner_surname;
     }
-
-//    public String getProperty_of_bank() {
-//        return property_of_bank;
-//    }
-//
-//    public void setProperty_of_bank(String property_of_bank) {
-//        this.property_of_bank = property_of_bank;
-//    }
 
     @Override
     public String toString() {

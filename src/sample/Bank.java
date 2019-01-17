@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Bank implements Subject {
     String bank_name;
-    List<Account> list_of_acc_in_bank = new ArrayList<Account>();
-    List<Client> list_of_clients = new ArrayList<Client>();
+    List<Account> list_of_acc_in_bank = new ArrayList<>();
+    List<Client> list_of_clients = new ArrayList<>();
     private ArrayList<Observer> subjects;
     private int current_balance;
     private int security_level;
 
     public Bank() {
-        subjects = new ArrayList<Observer>();
+        subjects = new ArrayList<>();
     }
 
     public Bank(String bank_name, int current_balance) {
@@ -57,48 +57,12 @@ public class Bank implements Subject {
 
     void balanceChanged(int stan) {
         setCurrent_balance(stan);
-//        current_balance = stan;
-//        if (current_balance > 1000000) {
-//            security_level = 3;
-//        }
-//        if (current_balance <= 1000000) {
-//            {
-//                security_level = 2;
-//            }
-//            if (current_balance <= 500000) {
-//                security_level = 1;
-//            }
-//        }
         notifyObservers(stan);
     }
-
-//    public int getResults() {
-//        return current_balance;
-//    }
 
     String getBank_name() {
         return bank_name;
     }
-
-//    public List<Account> getList_of_acc_in_bank() {
-//        return list_of_acc_in_bank;
-//    }
-//
-//    public void setBank_name(String bank_name) {
-//        this.bank_name = bank_name;
-//    }
-//
-//    public void setList_of_acc_in_bank(List<Account> list_of_acc_in_bank) {
-//        this.list_of_acc_in_bank = list_of_acc_in_bank;
-//    }
-//
-//    public List<Client> getList_of_clients() {
-//        return list_of_clients;
-//    }
-//
-//    public void setList_of_clients(List<Client> list_of_clients) {
-//        this.list_of_clients = list_of_clients;
-//    }
 
     void add_account(Account account) {
         list_of_acc_in_bank.add(account);
@@ -116,7 +80,7 @@ public class Bank implements Subject {
         return current_balance;
     }
 
-    void setCurrent_balance(int current_balance) {
+    private void setCurrent_balance(int current_balance) {
         this.current_balance = current_balance;
     }
 

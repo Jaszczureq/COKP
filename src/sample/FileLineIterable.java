@@ -9,12 +9,12 @@ public class FileLineIterable
         implements Iterable<String> {
     private File file;
 
-    public FileLineIterable(String fileName)
+    FileLineIterable(String fileName)
             throws IOException {
         this(new File(fileName));
     }
 
-    public FileLineIterable(File file) throws IOException {
+    private FileLineIterable(File file) throws IOException {
         if (!file.exists())
             throw new FileNotFoundException("Plik nie istnieje: " + file.getPath());
         if (!file.isFile())

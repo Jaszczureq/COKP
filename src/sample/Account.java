@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface Account {
-    String decorate();
-
     void add_card(Card card);
 
     List<Card> getCard_assigned_to_account();
@@ -34,8 +32,6 @@ public interface Account {
 
     void setCredit_amount(int credit_amount);
 
-    void someMethod();
-
     double getInterest_rate();
 
     boolean pay_off_credit(int amount);
@@ -54,13 +50,25 @@ class AccountImpl implements Account {
     private int balance = 1000;
     private int credit_amount = 0;
     private long acc_number;
-    private List<Card> card_assigned_to_account = new ArrayList<Card>();
+    private List<Card> card_assigned_to_account = new ArrayList<>();
 
     AccountImpl(String owner_name, String owner_surname, int acc_number) {
         this.owner_name = owner_name;
         this.owner_surname = owner_surname;
         this.acc_number = acc_number;
         this.state = new AccountOpen();
+    }
+
+    public AccountImpl(AccountImpl account) {
+        this.owner_name = account.owner_name;
+        this.owner_surname = account.owner_surname;
+        this.acc_number = account.acc_number;
+        this.balance = account.balance;                         //
+        this.card_assigned_to_account = account.card_assigned_to_account;
+    }
+
+    public boolean credit(int amount) {
+        return this.state.credit(this, amount);
     }
 
     public boolean pay_off_credit(int amount) {
@@ -73,10 +81,6 @@ class AccountImpl implements Account {
 
     public void setCredit_amount(int credit_amount) {
         this.credit_amount = credit_amount;
-    }
-
-    @Override
-    public void someMethod() {
     }
 
     @Override
@@ -99,31 +103,6 @@ class AccountImpl implements Account {
         return this;
     }
 
-    public boolean credit(int amount) {
-        return this.state.credit(this, amount); // delegacja
-    }
-
-//    public void close() {
-//        this.state = new AccountClosed();
-//    }
-//
-//    public void suspend() {
-//        this.state = new AccountSuspended();
-//    }
-
-    public AccountImpl(AccountImpl account) {
-        this.owner_name = account.owner_name;
-        this.owner_surname = account.owner_surname;
-        this.acc_number = account.acc_number;
-        this.balance = account.balance;                         //
-        this.card_assigned_to_account = account.card_assigned_to_account;
-    }
-
-    @Override
-    public String decorate() {
-        return null;
-    }
-
     //region getters, setters
     @Override
     public int getBalance() {
@@ -144,13 +123,6 @@ class AccountImpl implements Account {
     public void setState(AccountState state) {
         this.state = state;
     }
-    //    public float getInterest_rate() {
-//        return interest_rate;
-//}   //
-//
-//    public void setInterest_rate(float interest_rate) {
-//        this.interest_rate = interest_rate;
-//    }       //
 
     public String getOwner_name() {
         return owner_name;
@@ -176,25 +148,9 @@ class AccountImpl implements Account {
         this.owner_surname = owner_surname;
     }
 
-//    public void setAcc_number(long acc_number) {
-//        this.acc_number = acc_number;
-//    }
-//
-//    public void setCard_assigned_to_account(List<Card> card_assigned_to_account) {
-//        this.card_assigned_to_account = card_assigned_to_account;
-//    }
-
     public void add_card(Card card) {
         card_assigned_to_account.add(card);
     }
-
-//    public void delete_card(Card card) {
-//        card_assigned_to_account.remove(card);
-//    }
-//
-//    public boolean contain_card(Card card) {
-//        return card_assigned_to_account.contains(card);
-//    }
 
     public int getDecorators_count() {
         return decorators_count;
@@ -222,15 +178,6 @@ abstract class Account_level implements Account {
 
     Account_level(Account acc) {
         this.account = acc;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    @Override
-    public String decorate() {
-        return null;
     }
 
     //region Overrides
@@ -307,8 +254,11 @@ abstract class Account_level implements Account {
         account.setDecorators_count(decorators_count);
     }
 
-    //endregion
+    public double getInterest_rate() {
+        return 0.0;
+    }
 
+    //endregion
 
     @Override
     public Query doQuery(Card card, String curr, String firmName, float amount) {
@@ -321,16 +271,8 @@ abstract class Account_level implements Account {
         return getState().doQuery(card, curr, firmName, amount);
     }
 
-    public double getInterest_rate() {
-        return 0.0;
-    }
-
     public Account removeDecorators() {
         return account;
-//        if (getDecorators_count() == 2)
-//            return ((Account_level) account).getAccount();
-//        setDecorators_count(0);
-//        return account;
     }
 }
 
@@ -348,17 +290,8 @@ class Account_level_golden extends Account_level {
     }
 
     @Override
-    public Query doQuery(Card card, String curr, String firmName, float ammount) {
-        return super.account.doQuery(card, curr, firmName, ammount);
-    }
-
-//    public void setInterest_rate(double interest_rate) {
-//        this.interest_rate = interest_rate;
-//    }
-
-    @Override
-    public void someMethod() {
-        System.out.println("Golden Account");
+    public Query doQuery(Card card, String curr, String firmName, float amount) {
+        return super.account.doQuery(card, curr, firmName, amount);
     }
 
     @Override
@@ -378,13 +311,8 @@ class Account_level_foreign extends Account_level {
         setDecorators_count(getDecorators_count() + 1);
     }
 
-    @Override
-    public void someMethod() {
-        System.out.println("Foreign Account");
-    }
-
-    public Query doQuery(Card card, String curr, String firmName, float ammount) {
-        return account.getState().doQuery(card, curr, firmName, ammount);
+    public Query doQuery(Card card, String curr, String firmName, float amount) {
+        return account.getState().doQuery(card, curr, firmName, amount);
     }
 
     public double getInterest_rate() {

@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Controller implements Initializable, ActionListener {
 
-    private int time = 600;
+    private int time = 60;
 
     @FXML
     TextArea textArea;
@@ -117,7 +117,6 @@ public class Controller implements Initializable, ActionListener {
             }
         };
         System.setOut(new PrintStream(out, true));
-//        System.setErr(new PrintStream(out, true));
         prepareStuff();
         selectionModel = tabPane.getSelectionModel();
     }
@@ -164,6 +163,7 @@ public class Controller implements Initializable, ActionListener {
         textArea.clear();
     }
 
+    //region Karta
     @FXML
     public void add_card_prompt() {
         if (!is_credit.isSelected() && !is_debit.isSelected()) {
@@ -201,7 +201,9 @@ public class Controller implements Initializable, ActionListener {
         System.out.println("Brak konta o podanych danych");
     }
 
+    //endregion
 
+    //region Bank
     @FXML
     public void add_bank_prompt() {
         if (bank_name.getText().isEmpty() || bank_capital.getText().isEmpty()) {
@@ -209,14 +211,36 @@ public class Controller implements Initializable, ActionListener {
             return;
         }
         Bank bank = new Bank(bank_name.getText(), Integer.parseInt(bank_capital.getText()));
-//        int kapital = Integer.parseInt(bank_capital.getText());
-
-//        bank.balanceChanged(kapital);
         card_service_center.add_bank(bank);
 
         System.out.println("Dodano bank");
     }
 
+    @FXML
+    public void delete_bank_prompt() {
+        if (card_service_center.getBank_list().isEmpty()) {
+            System.out.println("Brak banków w bazie");
+            return;
+        }
+        try {
+            card_service_center.delete_bank(bank_name.getText());
+        } catch (NullPointerException e) {
+            System.out.println("Brak podanego banku w bazie");
+        }
+
+    }
+
+    @FXML
+    public void get_list_of_bank() {
+        if (card_service_center.getBank_list().isEmpty()) {
+            System.out.println("Brak banków w bazie");
+            return;
+        }
+        System.out.println(card_service_center.bank_list);
+    }
+    //endregion
+
+    //region Obserwator
     @FXML
     public void add_media() {
         if (obs_bank_name.getText().isEmpty()) {
@@ -297,30 +321,9 @@ public class Controller implements Initializable, ActionListener {
             }
         }
     }
+    //endregion
 
-    @FXML
-    public void delete_bank_prompt() {
-        if (card_service_center.getBank_list().isEmpty()) {
-            System.out.println("Brak banków w bazie");
-            return;
-        }
-        try {
-            card_service_center.delete_bank(bank_name.getText());
-        } catch (NullPointerException e) {
-            System.out.println("Brak podanego banku w bazie");
-        }
-
-    }
-
-    @FXML
-    public void get_list_of_bank() {
-        if (card_service_center.getBank_list().isEmpty()) {
-            System.out.println("Brak banków w bazie");
-            return;
-        }
-        System.out.println(card_service_center.bank_list);
-    }
-
+    //region Klient
     @FXML
     public void add_client() {
         if (client_assigned_to_bank.getText().isEmpty() || client_name.getText().isEmpty() || client_surname.getText().isEmpty()) {
@@ -344,7 +347,9 @@ public class Controller implements Initializable, ActionListener {
         }
         System.out.println("Brak banku o podanej nazwie");
     }
+    //endregion
 
+    //region Konto
     @FXML
     public void add_account() {
         if (account_assigned_to_bank.getText().isEmpty() || account_number.getText().isEmpty() || account_owner_name.getText().isEmpty() || account_owner_surname.getText().isEmpty()) {
@@ -357,15 +362,9 @@ public class Controller implements Initializable, ActionListener {
             for (Bank obj : card_service_center.bank_list) {
                 for (Account acc : obj.list_of_acc_in_bank) {
                     if (acc.getAcc_number() == Integer.parseInt(account_number.getText())) {
-//                        System.out.println("Updating account");
                         Account temp = acc;
-//                        try {
                         temp = (temp).removeDecorators();
-//                        } catch (ClassCastException e) {
-//                            temp = acc;
-//                        }
                         System.out.println(temp.toString());
-//                        }
                         if (foreign.isSelected()) {
                             temp = new Account_level_foreign(temp);
                         }
@@ -495,7 +494,9 @@ public class Controller implements Initializable, ActionListener {
         acc.setState(new AccountSuspended());
         System.out.println("Konto zostało zawieszone");
     }
+    //endregion
 
+    //region Firma
     @FXML
     public void add_firm() {
         if (Firm_name.getText().isEmpty()) {
@@ -523,7 +524,9 @@ public class Controller implements Initializable, ActionListener {
         }
         System.out.println("Brak firmy w bazie");
     }
+    //endregion
 
+    //region Transakcje
     @FXML
     public void add_query() {
         if (query_card_number.getText().isEmpty() || query_amount.getText().isEmpty() || query_currency.getText().isEmpty() || query_firm_name.getText().isEmpty()) {
@@ -593,7 +596,9 @@ public class Controller implements Initializable, ActionListener {
             System.out.println("Lista zapytań jest pusta - kod błędu: " + e);
         }
     }
+    //endregion
 
+    //region Archiwum
     @FXML
     public void save_to_file() {
         try {
@@ -626,7 +631,9 @@ public class Controller implements Initializable, ActionListener {
             ex.printStackTrace();
         }
     }
+    //endregion
 
+    //region Reminder
     class Reminder {
         private Timer timer;
 
@@ -657,6 +664,7 @@ public class Controller implements Initializable, ActionListener {
                 }
         }
     }
+    //endregion
 }
 
 

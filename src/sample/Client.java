@@ -24,14 +24,6 @@ public class Client {
         return surname;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     @Override
     public String toString() {
         return "Client{name='" + name + '\'' +
