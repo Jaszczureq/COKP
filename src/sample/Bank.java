@@ -49,26 +49,27 @@ public class Bank implements Subject {
         System.out.println("Usunięto obserwatora typu: " + temp);
     }
 
-    public void notifyObservers() {
+    public void notifyObservers(int stan) {
         for (Observer o : subjects) {
-            o.update(this);
+            o.update(this, stan);
         }
     }
 
     void balanceChanged(int stan) {
-        current_balance = stan;
-        if (current_balance > 1000000) {
-            security_level = 3;
-        }
-        if (current_balance <= 1000000) {
-            {
-                security_level = 2;
-            }
-            if (current_balance <= 500000) {
-                security_level = 1;
-            }
-        }
-        notifyObservers();
+        setCurrent_balance(stan);
+//        current_balance = stan;
+//        if (current_balance > 1000000) {
+//            security_level = 3;
+//        }
+//        if (current_balance <= 1000000) {
+//            {
+//                security_level = 2;
+//            }
+//            if (current_balance <= 500000) {
+//                security_level = 1;
+//            }
+//        }
+        notifyObservers(stan);
     }
 
 //    public int getResults() {

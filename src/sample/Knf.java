@@ -19,7 +19,23 @@ class Knf implements Observer, Notifications {
         return knf;
     }
 
-    public void update(Bank bank) {
+    private int getSecLevel(int stan){
+        int security_level=0;
+        if (stan > 750000) {
+            security_level = 3;
+        }
+        if (stan <= 750000) {
+            {
+                security_level = 2;
+            }
+            if (stan <= 350000) {
+                security_level = 1;
+            }
+        }
+        return security_level;
+    }
+
+    public void update(Bank bank, int stan) {
         int index = banks.indexOf(bank);
         if (index == -1) {
             System.out.println("Brak banku");
@@ -27,8 +43,8 @@ class Knf implements Observer, Notifications {
         }
 
         Bank existingBank = banks.get(index);
-        existingBank.setCurrent_balance(bank.getCurrent_balance());
-        existingBank.setSecurity_level(bank.getSecurity_level());
+//        existingBank.setCurrent_balance(bank.getCurrent_balance());
+        existingBank.setSecurity_level(getSecLevel(stan));
 
         inform(bank);
     }

@@ -282,7 +282,7 @@ public class Controller implements Initializable, ActionListener {
     }
 
     @FXML
-    public void change_kapital() {
+    public void change_capital() {
         if (obs_bank_name.getText().isEmpty()) {
             System.out.println("Uzupełnij wszystkie pola!");
             return;
