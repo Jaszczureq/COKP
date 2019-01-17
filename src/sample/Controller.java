@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Controller implements Initializable, ActionListener {
 
-    int time = 600;
+    private int time = 600;
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -27,7 +27,6 @@ public class Controller implements Initializable, ActionListener {
     @FXML
     public void selectTab() {
         selectionModel.getSelectedIndex();
-
         selectionModel.selectNext();
     }
 
@@ -105,17 +104,6 @@ public class Controller implements Initializable, ActionListener {
     public void initialize(URL location, ResourceBundle resources) {
         prepareStuff();
         selectionModel = tabPane.getSelectionModel();
-
-//        Main.prepButtun(switchTabs);
-//        Main.stage.getScene().getAccelerators().put(
-//                new KeyCodeCombination(KeyCode.LEFT, KeyCombination.ALT_DOWN),
-//                new Runnable() {
-//                    @Override public void run() {
-//                        switchTabs.fire();
-//                    }
-//                }
-//        );
-
     }
 
     private void prepareStuff() {
@@ -130,9 +118,6 @@ public class Controller implements Initializable, ActionListener {
         bank.add_account(account);
         Card card = new Debit(card_number, name, surname, bank.getBank_name());
         account.add_card(card);
-
-//        account.someMethod();
-//        account.credit(credit_amount);
         new Reminder(time);
     }
 
@@ -538,7 +523,7 @@ public class Controller implements Initializable, ActionListener {
                     for (Card card : account.getCard_assigned_to_account()) {
                         if (card.getCard_number() == card_number_method) {
                             boolean decision = Math.random() < 0.8;
-                            if (true) {
+                            if (decision) {
                                 try {
                                     Query query = account.doQuery(card, query_currency.getText(),
                                             query_firm_name.getText(), query_amount_method);

@@ -10,14 +10,13 @@ import java.util.NoSuchElementException;
 
 public class FileLineIterator
         implements Iterator<String> {
-    private FileReader reader;
     private BufferedReader buff_in = null;
-    private String string = null;
+    private String string;
 
-    public FileLineIterator(File file)
+    FileLineIterator(File file)
             throws IOException {
         try {
-            reader = new FileReader(file);
+            FileReader reader = new FileReader(file);
             buff_in = new BufferedReader(reader);
             string = buff_in.readLine();
             if (string == null) {
@@ -28,7 +27,7 @@ public class FileLineIterator
             string = null;
             if (buff_in != null) try {
                 buff_in.close();
-            } catch (IOException ex2) {
+            } catch (IOException ignored) {
             }
             buff_in = null;
             throw ex;
@@ -73,7 +72,7 @@ public class FileLineIterator
             if (buff_in != null)
                 try {
                     buff_in.close();
-                } catch (Exception ex) {
+                } catch (Exception ignored) {
                 }
             buff_in = null;
         } finally {

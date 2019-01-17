@@ -47,7 +47,7 @@ class AccountOpen implements AccountState {
 }
 
 class AccountSuspended implements AccountState {
-    String msg = "Konto jest zawieszone";
+    private String msg = "Konto jest zawieszone";
 
     public void credit(Account acc, int amount) {
         System.out.println(msg);
@@ -80,7 +80,7 @@ class AccountSuspended implements AccountState {
 }
 
 class AccountClosed implements AccountState {
-    String msg = "Konto jest zamknięte";
+    private String msg = "Konto jest zamknięte";
 
     public void credit(Account acc, int amount) {
         System.out.println(msg);

@@ -6,12 +6,12 @@ import java.util.List;
 
 
 public class Card_service_center{
-    public List<Bank>bank_list = new ArrayList<Bank>();
-    public List<Query>query_list=new ArrayList<Query>();
-    public List<Firm>firm_list=new ArrayList<Firm>();
-    public boolean authorisation;
+    List<Bank>bank_list = new ArrayList<Bank>();
+    List<Query>query_list=new ArrayList<Query>();
+    List<Firm>firm_list=new ArrayList<Firm>();
+    private boolean authorisation;
 
-    public List<Bank> getBank_list() {
+    List<Bank> getBank_list() {
         return bank_list;
     }
 
@@ -23,7 +23,7 @@ public class Card_service_center{
         return authorisation;
     }
 
-    public List<Query> getQuery_list() {
+    List<Query> getQuery_list() {
         return query_list;
     }
 
@@ -31,7 +31,7 @@ public class Card_service_center{
         this.authorisation = authorisation;
     }
 
-    public void add_firm(Firm firm){
+    void add_firm(Firm firm){
         firm_list.add(firm);
     }
 
@@ -39,7 +39,7 @@ public class Card_service_center{
         firm_list.remove(firm);
     }
 
-    public void add_query(Query query){
+    void add_query(Query query){
         query_list.add(query);
     }
 
@@ -47,11 +47,11 @@ public class Card_service_center{
         query_list.remove(query);
     }
 
-    public void add_bank(Bank bank){
+    void add_bank(Bank bank){
         bank_list.add(bank);
     }
 
-    public void delete_bank(String bank_name_par) {
+    void delete_bank(String bank_name_par) {
         int index_to_del;
         for(Iterator<Bank> iterator = bank_list.iterator(); iterator.hasNext();){
             Bank bank_clone = iterator.next();
@@ -74,8 +74,8 @@ public class Card_service_center{
                 '}';
     }
 
-    public boolean set_authorisation(){
-        return Math.random()<0.7;
-    }
+//    public boolean set_authorisation(){
+//        return Math.random()<0.7;
+//    }
 
 }

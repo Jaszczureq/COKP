@@ -4,10 +4,10 @@ package sample;
 public class Card {
 
     protected long card_number;
-    protected float balance=0;
+    private float balance=0;
     protected String owner_name;
     protected String owner_surname;
-    protected String property_of_bank;
+    String property_of_bank;
 
     public Card(long card_number, String owner_name, String owner_surname, String property_of_bank){
         this.card_number=card_number;
@@ -28,17 +28,17 @@ public class Card {
         return card_number;
     }
 
-    public void setCard_number(long card_number) {
-        this.card_number = card_number;
-    }
-
-    public float getBalance() {
-        return balance;
-    }
-
-    public void setBalance(float balance) {
-        this.balance = balance;
-    }
+//    public void setCard_number(long card_number) {
+//        this.card_number = card_number;
+//    }
+//
+//    public float getBalance() {
+//        return balance;
+//    }
+//
+//    public void setBalance(float balance) {
+//        this.balance = balance;
+//    }
 
     public String getOwner_name() {
         return owner_name;
@@ -56,13 +56,13 @@ public class Card {
         this.owner_surname = owner_surname;
     }
 
-    public String getProperty_of_bank() {
-        return property_of_bank;
-    }
-
-    public void setProperty_of_bank(String property_of_bank) {
-        this.property_of_bank = property_of_bank;
-    }
+//    public String getProperty_of_bank() {
+//        return property_of_bank;
+//    }
+//
+//    public void setProperty_of_bank(String property_of_bank) {
+//        this.property_of_bank = property_of_bank;
+//    }
 
     @Override
     public String toString() {

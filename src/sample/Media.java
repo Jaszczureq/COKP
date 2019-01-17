@@ -10,7 +10,7 @@ class Media implements Observer, Notifications {
         banks = new ArrayList<Bank>();
     }
 
-    public static Media getInstance() {
+    static Media getInstance() {
         if (media == null)
             synchronized (Media.class) {
                 if (media == null)

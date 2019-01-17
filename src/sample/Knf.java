@@ -10,7 +10,7 @@ class Knf implements Observer, Notifications {
         banks = new ArrayList<Bank>();
     }
 
-    public static Knf getInstance() {
+    static Knf getInstance() {
         if (knf == null)
             synchronized (Knf.class) {
                 if (knf == null)

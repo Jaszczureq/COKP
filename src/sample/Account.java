@@ -45,17 +45,16 @@ public interface Account {
 
 class AccountImpl implements Account {
 
-    public int decorators_count = 0;
+    private int decorators_count = 0;
     private AccountState state = null;
     private String owner_name;
     private String owner_surname;
     private int balance = 1000;
     private int credit_amount = 0;
-    //    private float interest_rate;                                    //
-    public long acc_number;
-    public List<Card> card_assigned_to_account = new ArrayList<Card>();
+    private long acc_number;
+    private List<Card> card_assigned_to_account = new ArrayList<Card>();
 
-    public AccountImpl(String owner_name, String owner_surname, int acc_number) {
+    AccountImpl(String owner_name, String owner_surname, int acc_number) {
         this.owner_name = owner_name;
         this.owner_surname = owner_surname;
         this.acc_number = acc_number;
@@ -76,7 +75,6 @@ class AccountImpl implements Account {
 
     @Override
     public void someMethod() {
-        return;
     }
 
     @Override
@@ -98,19 +96,18 @@ class AccountImpl implements Account {
         this.state.credit(this, amount); // delegacja
     }
 
-    public void close() {
-        this.state = new AccountClosed();
-    }
-
-    public void suspend() {
-        this.state = new AccountSuspended();
-    }
+//    public void close() {
+//        this.state = new AccountClosed();
+//    }
+//
+//    public void suspend() {
+//        this.state = new AccountSuspended();
+//    }
 
     public AccountImpl(AccountImpl account) {
         this.owner_name = account.owner_name;
         this.owner_surname = account.owner_surname;
         this.acc_number = account.acc_number;
-//        this.interest_rate = account.interest_rate;             //
         this.balance = account.balance;                         //
         this.card_assigned_to_account = account.card_assigned_to_account;
     }
@@ -172,25 +169,25 @@ class AccountImpl implements Account {
         this.owner_surname = owner_surname;
     }
 
-    public void setAcc_number(long acc_number) {
-        this.acc_number = acc_number;
-    }
-
-    public void setCard_assigned_to_account(List<Card> card_assigned_to_account) {
-        this.card_assigned_to_account = card_assigned_to_account;
-    }
+//    public void setAcc_number(long acc_number) {
+//        this.acc_number = acc_number;
+//    }
+//
+//    public void setCard_assigned_to_account(List<Card> card_assigned_to_account) {
+//        this.card_assigned_to_account = card_assigned_to_account;
+//    }
 
     public void add_card(Card card) {
         card_assigned_to_account.add(card);
     }
 
-    public void delete_card(Card card) {
-        card_assigned_to_account.remove(card);
-    }
-
-    public boolean contain_card(Card card) {
-        return card_assigned_to_account.contains(card);
-    }
+//    public void delete_card(Card card) {
+//        card_assigned_to_account.remove(card);
+//    }
+//
+//    public boolean contain_card(Card card) {
+//        return card_assigned_to_account.contains(card);
+//    }
 
     public int getDecorators_count() {
         return decorators_count;
@@ -216,7 +213,7 @@ class AccountImpl implements Account {
 abstract class Account_level implements Account {
     public Account account;
 
-    public Account_level(Account acc) {
+    Account_level(Account acc) {
         this.account = acc;
     }
 
@@ -321,7 +318,7 @@ abstract class Account_level implements Account {
         return 0.0;
     }
 
-    public Account removeDecorators() {
+    Account removeDecorators() {
         if (getDecorators_count() == 2)
             return ((Account_level) account).getAccount();
         setDecorators_count(0);
@@ -332,7 +329,7 @@ abstract class Account_level implements Account {
 class Account_level_golden extends Account_level {
     private double interest_rate;
 
-    public Account_level_golden(Account acc, double ir) {
+    Account_level_golden(Account acc, double ir) {
         super(acc);
         this.interest_rate = ir;
         setDecorators_count(getDecorators_count() + 1);
@@ -347,9 +344,9 @@ class Account_level_golden extends Account_level {
         return super.account.doQuery(card, curr, firmName, ammount);
     }
 
-    public void setInterest_rate(double interest_rate) {
+//    public void setInterest_rate(double interest_rate) {
 //        this.interest_rate = interest_rate;
-    }
+//    }
 
     @Override
     public void someMethod() {
@@ -364,7 +361,7 @@ class Account_level_golden extends Account_level {
 
 class Account_level_foreign extends Account_level {
 
-    public Account_level_foreign(Account acc) {
+    Account_level_foreign(Account acc) {
         super(acc);
         setDecorators_count(getDecorators_count() + 1);
     }
