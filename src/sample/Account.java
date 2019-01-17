@@ -22,7 +22,7 @@ public interface Account {
 
     long getAcc_number();
 
-    void credit(int amount);
+    boolean credit(int amount);
 
     void setState(AccountState state);
 
@@ -99,8 +99,8 @@ class AccountImpl implements Account {
         return this;
     }
 
-    public void credit(int amount) {
-        this.state.credit(this, amount); // delegacja
+    public boolean credit(int amount) {
+        return this.state.credit(this, amount); // delegacja
     }
 
 //    public void close() {
@@ -288,8 +288,8 @@ abstract class Account_level implements Account {
     }
 
     @Override
-    public void credit(int amount) {
-        account.credit(amount);
+    public boolean credit(int amount) {
+        return account.credit(amount);
     }
 
     @Override

@@ -117,7 +117,7 @@ public class Controller implements Initializable, ActionListener {
             }
         };
         System.setOut(new PrintStream(out, true));
-        System.setErr(new PrintStream(out, true));
+//        System.setErr(new PrintStream(out, true));
         prepareStuff();
         selectionModel = tabPane.getSelectionModel();
     }
@@ -360,7 +360,7 @@ public class Controller implements Initializable, ActionListener {
 //                        System.out.println("Updating account");
                         Account temp = acc;
 //                        try {
-                        temp = ((Account_level) temp).removeDecorators();
+                        temp = (temp).removeDecorators();
 //                        } catch (ClassCastException e) {
 //                            temp = acc;
 //                        }
@@ -428,9 +428,14 @@ public class Controller implements Initializable, ActionListener {
 
         for (Bank bank : card_service_center.bank_list) {
             for (Account temp : bank.list_of_acc_in_bank) {
+                if (amount > bank.getCurrent_balance()) {
+                    System.out.println("Brak środków w banku");
+                    return;
+                }
                 if (acc.equals(temp)) {
-                    acc.credit(amount);
-                    bank.balanceChanged(bank.getCurrent_balance() - amount);
+                    if (acc.credit(amount))
+                        bank.balanceChanged(bank.getCurrent_balance() - amount);
+
                 }
             }
         }

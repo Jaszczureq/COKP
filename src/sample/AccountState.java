@@ -1,7 +1,7 @@
 package sample;
 
 public interface AccountState {
-    void credit(Account acc, int amount);
+    boolean credit(Account acc, int amount);
 
     Card add_card(long card_number, String owner_name, String owner_surname, String property_of_bank);
 
@@ -12,9 +12,10 @@ public interface AccountState {
 }
 
 class AccountOpen implements AccountState {
-    public void credit(Account acc, int amount) {
+    public boolean credit(Account acc, int amount) {
         acc.setBalance(acc.getBalance() + amount);
         acc.setCredit_amount(acc.getCredit_amount() + amount);
+        return true;
     }
 
     @Override
@@ -49,8 +50,9 @@ class AccountOpen implements AccountState {
 class AccountSuspended implements AccountState {
     private String msg = "Konto jest zawieszone";
 
-    public void credit(Account acc, int amount) {
+    public boolean credit(Account acc, int amount) {
         System.out.println(msg);
+        return false;
     }
 
     @Override
@@ -72,8 +74,14 @@ class AccountSuspended implements AccountState {
             System.out.println("Nie wystarczający stan konta");
             return false;
         }
-        acc.setBalance(acc.getBalance() - amount);
-        acc.setCredit_amount(acc.getCredit_amount() - amount);
+        int temp = acc.getCredit_amount() - amount;
+        if (temp < 0) {
+            acc.setBalance(acc.getBalance() - acc.getCredit_amount());
+            acc.setCredit_amount(0);
+        } else {
+            acc.setBalance(acc.getBalance() - amount);
+            acc.setCredit_amount(acc.getCredit_amount() - amount);
+        }
         System.out.println("Pozostała kwota kredytu: " + acc.getCredit_amount());
         return true;
     }
@@ -82,8 +90,9 @@ class AccountSuspended implements AccountState {
 class AccountClosed implements AccountState {
     private String msg = "Konto jest zamknięte";
 
-    public void credit(Account acc, int amount) {
+    public boolean credit(Account acc, int amount) {
         System.out.println(msg);
+        return false;
     }
 
     @Override
